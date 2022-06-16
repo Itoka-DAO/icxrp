@@ -12,8 +12,8 @@ const Footer = () => {
               <Heading color="whiteAlpha.600" as="h4" fontSize="xl">NAVIGATE</Heading>
               <Divider my="2" borderColor="primary" />
               <VStack spacing="-0.5" align="stretch" fontSize="xl" fontWeight={700} color="white">
-                <Link>Itoka Home</Link>
-                <Link>Muxiv</Link>
+                <Link href = "https://itoka.xyz">Itoka Home</Link>
+                <Link href = "https://ku323-qyaaa-aaaai-ackgq-cai.ic0.app/airdrop">Muxiv</Link>
               </VStack>
             </Box>
 
