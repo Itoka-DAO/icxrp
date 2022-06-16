@@ -2,16 +2,15 @@ import { Box, Flex, HStack, Heading, Divider, VStack, Link, Container } from "@c
 import { FaTwitter, FaDiscord, FaSoundcloud, FaMedium, FaGithub } from "react-icons/fa"
 import IconLink from "./IconLink"
 
-
 const Footer = () => {
   return (
-    <Box pb="8" pt="6">
+    <Box pb="8" pt="6" bgColor="blackAlpha.200">
       <Container maxW="1280px">
         <Flex>
           <HStack spacing="14" align="stretch">
             <Box w="300px">
-              <Heading color="blackAlpha.400" as="h4" fontSize="xl">NAVIGATE</Heading>
-              <Divider my="1" />
+              <Heading color="whiteAlpha.600" as="h4" fontSize="xl">NAVIGATE</Heading>
+              <Divider my="2" borderColor="primary" />
               <VStack spacing="-0.5" align="stretch" fontSize="xl" fontWeight={700} color="white">
                 <Link>Itoka Home</Link>
                 <Link>Muxiv</Link>
@@ -19,8 +18,8 @@ const Footer = () => {
             </Box>
 
             <Box w="300px">
-              <Heading color="blackAlpha.400" as="h4" fontSize="xl">FOLLOW US</Heading>
-              <Divider my="1" />
+              <Heading color="whiteAlpha.600" as="h4" fontSize="xl">FOLLOW US</Heading>
+              <Divider my="2" borderColor="primary" />
               <VStack spacing="-0.5" align="stretch" fontSize="xl" fontWeight={700} color="white">
                 <IconLink href="#" icon={FaTwitter}>Twitter</IconLink>
                 <IconLink href="#" icon={FaDiscord}>Discord</IconLink>
