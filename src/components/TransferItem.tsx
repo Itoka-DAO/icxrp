@@ -16,21 +16,21 @@ export const BlockChainTag = ({ blockChain, type }: BlockChainTagProps) => {
     case "added":
       return (
         <Box>
-          <Tag fontWeight={700} color="white" bgColor={primary.toLowerCase()}>{primary}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} color="white" bgColor={primary.toLowerCase()}>{primary}</Tag>
           <Icon fontSize="2xl" as={FiArrowRight} />
-          <Tag fontWeight={700} color={other.toLowerCase()} bgColor="transparent">{other}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} color={other.toLowerCase()} bgColor="transparent">{other}</Tag>
         </Box>
       )
     case "success":
       return (
         <Box>
-          <Tag fontWeight={700} bgColor="transparent" color={other.toLowerCase()}>{other}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={other.toLowerCase()}>{other}</Tag>
           <Icon fontSize="2xl" as={FiArrowRight} />
-          <Tag fontWeight={700} bgColor={primary.toLowerCase()} color="white">{primary}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} bgColor={primary.toLowerCase()} color="white">{primary}</Tag>
         </Box>
       )
     default:
-      return <Tag fontWeight={700} color="white" bgColor={primary.toLowerCase()}>{primary}</Tag>
+      return <Tag w="44px" textAlign="center" fontWeight={700} color="white" bgColor={primary.toLowerCase()}>{primary}</Tag>
   }
 
 }
