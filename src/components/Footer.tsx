@@ -21,11 +21,11 @@ const Footer = () => {
               <Heading color="whiteAlpha.600" as="h4" fontSize="xl">FOLLOW US</Heading>
               <Divider my="2" borderColor="primary" />
               <VStack spacing="-0.5" align="stretch" fontSize="xl" fontWeight={700} color="white">
-                <IconLink href="#" icon={FaTwitter}>Twitter</IconLink>
-                <IconLink href="#" icon={FaDiscord}>Discord</IconLink>
-                <IconLink href="#" icon={FaSoundcloud}>SoundCloud</IconLink>
-                <IconLink href="#" icon={FaMedium}>Medium</IconLink>
-                <IconLink href="#" icon={FaGithub}>Github</IconLink>
+                <IconLink href="https://twitter.com/Itoka_NFT" icon={FaTwitter}>Twitter</IconLink>
+                <IconLink href="https://discord.gg/2kR54ypC7a" icon={FaDiscord}>Discord</IconLink>
+                <IconLink href="https://soundcloud.com/octai-music" icon={FaSoundcloud}>SoundCloud</IconLink>
+                <IconLink href="https://medium.com/@Itoka_NFT" icon={FaMedium}>Medium</IconLink>
+                <IconLink href="https://github.com/ItokaDAO" icon={FaGithub}>Github</IconLink>
               </VStack>
             </Box>
           </HStack>
