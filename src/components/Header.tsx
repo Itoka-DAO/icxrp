@@ -1,4 +1,4 @@
-import { Box, Container, Flex, HStack, Icon, IconButton, Text, VStack } from '@chakra-ui/react'
+import { Container, Flex, HStack, Icon, IconButton, Text, VStack } from '@chakra-ui/react'
 import { BiExit } from 'react-icons/bi';
 
 

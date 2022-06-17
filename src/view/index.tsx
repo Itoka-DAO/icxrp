@@ -24,7 +24,7 @@ const bodyBG = "linear-gradient(135.6deg, rgba(21, 127, 255, 0.2) -8.76%, rgba(1
 const Main = () => {
 
   const [connectPanelVisible, setConnectPanelVisible] = useState(false)
-  const [isConnect, setIsConnect] = useState(true)
+  const [isConnect] = useState(true)
 
   return (
     <Box bg={bodyBG}>

@@ -1,6 +1,6 @@
 import { Box, Button, Container, Heading, HStack, SimpleGrid } from "@chakra-ui/react";
 import Card from "./Card";
-import TransferItem, { ReadyForTransferItem, ReadyToAddTransferItem } from "./TransferItem";
+import { ReadyForTransferItem, ReadyToAddTransferItem } from "./TransferItem";
 
 const NFTList: { chain: "XRP" | "ICP", index: string, thumb: string, name: string, type: any }[] = [
   { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
