@@ -25,7 +25,7 @@ const Footer = () => {
                 <IconLink href="https://discord.gg/2kR54ypC7a" icon={FaDiscord}>Discord</IconLink>
                 <IconLink href="https://soundcloud.com/octai-music" icon={FaSoundcloud}>SoundCloud</IconLink>
                 <IconLink href="https://medium.com/@Itoka_NFT" icon={FaMedium}>Medium</IconLink>
-                <IconLink href="https://github.com/ItokaDAO" icon={FaGithub}>Github</IconLink>
+                <IconLink href="https://github.com/Itoka-DAO" icon={FaGithub}>Github</IconLink>
               </VStack>
             </Box>
           </HStack>
