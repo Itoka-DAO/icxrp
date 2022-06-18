@@ -1,5 +1,5 @@
 import { Box, Button, Center, Container, Heading, HStack, Spinner } from '@chakra-ui/react';
-import { useTransfer } from '../context';
+import { useTransfer } from '../hooks';
 import Card from './Card';
 import { ReadyForTransferItem } from './TransferItem';
 
@@ -17,7 +17,7 @@ const VerifyTransfer = () => {
       <Center>
         {!submitLoading && <Box maxW="670" mb="6" mt="12" flex="1">
           <Card title="Transfer List">
-            {selectedTransferNFT.map(item => <ReadyForTransferItem onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
+            {selectedTransferNFT.map(item => <ReadyForTransferItem key={item.id} onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
           </Card>
         </Box>}
 

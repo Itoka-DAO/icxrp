@@ -10,7 +10,8 @@ import TransferItem from "../components/TransferItem"
 import TransferNFT from "../components/TransferNFT"
 import TransferSuccess from "../components/TransferSuccess"
 import VerifyTransfer from "../components/VerifyTransfer"
-import { Step, useConnect, useToken, useTransfer } from "../context"
+import { Step } from "../context"
+import { useConnect, useToken, useTransfer } from '../hooks'
 
 import BGImg from '../images/holographic.png'
 
@@ -25,6 +26,8 @@ const Main = () => {
   const { step } = useTransfer()
 
   const { allToken } = useToken()
+
+
 
   return (
     <Box bg={bodyBG} minHeight="100vh">
@@ -49,7 +52,7 @@ const Main = () => {
         <Container maxW="1200">
           <Card title="All NFT Listing">
             <SimpleGrid columns={2} spacingX="14">
-              {allToken.map(item => <TransferItem nftData={item} />)}
+              {allToken.map(item => <TransferItem key={item.id} nftData={item} />)}
             </SimpleGrid>
           </Card>
         </Container>

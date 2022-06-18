@@ -1,0 +1,146 @@
+type XrpPublicKey = text;
+type TransferResponse = 
+ variant {
+   err:
+    variant {
+      CannotNotify: AccountIdentifier;
+      InsufficientBalance;
+      InvalidToken: TokenIdentifier;
+      Other: text;
+      Rejected;
+      Unauthorized: AccountIdentifier;
+    };
+   ok: Balance;
+ };
+type TokenInfo = 
+ record {
+   isOnIC: bool;
+   metadata: MetadataURL;
+   nftokenID: NFTokenID;
+   tokenIdentifier: TokenIdentifier__1;
+   tokenIndex: TokenIndex;
+ };
+type TokenIndex = nat32;
+type TokenIdentifier__1 = text;
+type TokenIdentifier = text;
+type TokenId = 
+ record {
+   ic: TokenIndex;
+   xrp: NFTokenID;
+ };
+type Time = int;
+type Result_7 = 
+ variant {
+   err: text;
+   ok: vec TokenInfo;
+ };
+type Result_6 = 
+ variant {
+   err: text;
+   ok: bool;
+ };
+type Result_5 = 
+ variant {
+   err: text;
+   ok: Metadata;
+ };
+type Result_4 = 
+ variant {
+   err: text;
+   ok: NFTokenID;
+ };
+type Result_3 = 
+ variant {
+   err: text;
+   ok: TokenIdentifier__1;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: TokenIndex;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: principal;
+ };
+type Operation = 
+ variant {
+   IC2XRP;
+   XRP2IC;
+ };
+type NFTokenID = text;
+type MetadataURL = 
+ variant {
+   metadata_ic: Metadata;
+   metadata_xrp: text;
+ };
+type Metadata = 
+ variant {
+   fungible:
+    record {
+      decimals: nat8;
+      metadata: opt blob;
+      name: text;
+      symbol: text;
+    };
+   nonfungible: record {metadata: opt blob;};
+ };
+type CrossBridgeTranscation = 
+ record {
+   from: Account;
+   index: nat;
+   op: Operation;
+   timestamp: Time;
+   to: Account;
+   tokenIndex: TokenId;
+ };
+type CommonError = 
+ variant {
+   InvalidToken: TokenIdentifier;
+   Other: text;
+ };
+type Bridge = 
+ service {
+   addCustodian: (principal) -> (Result);
+   balance_bridge: (TokenIndex) -> (BalanceResponse);
+   getAccountIdentifier: (principal) -> (AccountIdentifier__1) query;
+   getAllTokenInfo: () -> (Result_7) query;
+   getCustodian: () -> (vec principal) query;
+   getIsOnIC: (TokenIndex) -> (Result_6) query;
+   getMetadata_ic: (TokenIndex) -> (Result_5) query;
+   getMetadata_xrp: (TokenIndex) -> (Result_2) query;
+   getTokenId_ic: (NFTokenID) -> (Result_1) query;
+   getTokenId_xrp: (TokenIndex) -> (Result_4) query;
+   getTokenIdentifier: (TokenIndex) -> (Result_3) query;
+   getTransactions: (nat, nat) -> (vec CrossBridgeTranscation) query;
+   getXrplIssuerPrincipal: () -> (principal) query;
+   ic2xrp: (TokenIndex, NFTokenID, principal, XrpPublicKey) ->
+    (BalanceResponse);
+   setIdx2TokenIdentifier: (TokenIdentifier__1) -> (Result_1);
+   setMetadata_ic: () -> (Result_2);
+   setMetadata_xrp: (TokenIndex, text) -> (Result_1);
+   setXrplIssuerPrincipal: (principal) -> (Result);
+   thisCanister: () -> (principal) query;
+   xrp2ic: (TokenIndex, NFTokenID, XrpPublicKey, principal) ->
+    (TransferResponse);
+ };
+type BalanceResponse = 
+ variant {
+   err: CommonError;
+   ok: Balance;
+ };
+type Balance = nat;
+type AccountIdentifier__1 = text;
+type AccountIdentifier = text;
+type Account = 
+ variant {
+   ic: principal;
+   xrp: XrpPublicKey;
+ };
+service : () -> Bridge

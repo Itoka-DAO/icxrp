@@ -1,5 +1,6 @@
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Flex, Heading, HStack, IconButton, Text } from "@chakra-ui/react";
-import { useConnect } from "../context";
+import { useConnect } from "../hooks";
+import { ConnectType } from "../types/connect";
 import { DfinityIcon, PlugIcon, StoicIcon } from "./Icons";
 
 interface ConnectPanelProps {
@@ -31,13 +32,13 @@ const ConnectPanel = (props: ConnectPanelProps) => {
               borderRadius="full"
               colorScheme="blackAlpha"
               fontSize="sm"
-              onClick={connect}
+              onClick={() => connect(ConnectType.InternetIdentity)}
               leftIcon={<DfinityIcon fontSize="4xl" />}>Connect with Internet Identity</Button>
             <Box mt="40">
               <Text fontWeight="700" mb="4">or connect with</Text>
               <HStack spacing="2">
-                <IconButton aria-label="connect to plug" icon={<PlugIcon />} fontSize="2xl" colorScheme="transparent" />
-                <IconButton aria-label="connect to stoic" icon={<StoicIcon />} fontSize="2xl" colorScheme="transparent" />
+                <IconButton onClick={() => connect(ConnectType.Plug)} aria-label="connect to plug" icon={<PlugIcon />} fontSize="2xl" colorScheme="transparent" />
+                <IconButton onClick={() => connect(ConnectType.Stoic)} aria-label="connect to stoic" icon={<StoicIcon />} fontSize="2xl" colorScheme="transparent" />
               </HStack>
             </Box>
           </Flex>

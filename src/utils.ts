@@ -13,3 +13,14 @@ export const ellipsis = (str: string): string => {
   const arr = str.split('-');
   return `${arr[0]}-${arr[1]}****${arr[arr.length - 2]}-${arr[arr.length - 1]}`;
 };
+
+export const ellipsisShort = (str: string): string => {
+  const arr = str.split('-');
+  return `${arr[0]}****${arr[arr.length - 1]}`;
+};
+
+export const ellipsisKey = (str: string) => {
+  const strstart = str.substring(0, 6);
+  const strend = str.substring(str.length - 6, str.length);
+  return `${strstart}***${strend}`;
+};

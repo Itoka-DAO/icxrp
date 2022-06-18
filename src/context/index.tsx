@@ -1,6 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
+import { useWallet } from '../hooks';
+import InternetIdentity from '../services/InternetIdentity';
+// import Stoic from '../services/stoic';
+import { ConnectData, ConnectType } from '../types/connect';
+// import { crossIC2XRP, crossXRP2IC } from '../services';
 import { NFTTokenFormated } from '../types/token';
-import { formatToken } from '../utils';
 
 export enum Step {
   Transfer,
@@ -11,6 +15,10 @@ export enum Step {
 interface MainContextType {
   isConnect: boolean;
   setConnect: React.Dispatch<React.SetStateAction<boolean>>;
+
+  connectData?: ConnectData,
+  setConnectData: React.Dispatch<React.SetStateAction<ConnectData | undefined>>;
+
   connectPanelVisible: boolean;
   setConnectPanelVisible: React.Dispatch<React.SetStateAction<boolean>>;
   step: Step,
@@ -26,6 +34,8 @@ interface MainContextType {
 const defaultValue = {
   isConnect: false,
   setConnect: () => { },
+  connectData: undefined,
+  setConnectData: () => { },
   connectPanelVisible: false,
   setConnectPanelVisible: () => { },
   step: Step.Transfer,
@@ -42,7 +52,10 @@ export const MainContext = createContext<MainContextType>(defaultValue);
 
 export const MainProvider = ({ children }: { children: ReactNode }) => {
 
+  const { getXRPKeys } = useWallet()
+
   const [isConnect, setConnect] = useState(false)
+  const [connectData, setConnectData] = useState<ConnectData>()
   const [connectPanelVisible, setConnectPanelVisible] = useState(false)
 
   const [step, setStep] = useState(Step.Transfer)
@@ -55,9 +68,37 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
     return allToken;
   }, [allToken, isConnect])
 
+  const init = async () => {
+    if (await InternetIdentity.isAuthenticated()) {
+      const identity = await InternetIdentity.getIdentity()
+      const principal = identity.getPrincipal().toString()
+      getXRPKeys(principal).then(res => {
+        setConnect(true)
+        setConnectData({
+          type: ConnectType.InternetIdentity,
+          principal: principal,
+          xrp: res
+        })
+      })
+    }
+    // else if (await Stoic.isAuthenticated()) {
+    //   console.log("Login via Stoic")
+    //   setConnect(true)
+    // }
+    else if (false) {
+      setConnect(true)
+    }
+  }
+
+  useEffect(() => {
+    init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <MainContext.Provider value={{
       isConnect, setConnect,
+      connectData, setConnectData,
       connectPanelVisible, setConnectPanelVisible,
       step, setStep,
       selectedTransferNFT, setSelectedTransferNFT,
@@ -68,120 +109,3 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
   )
 
 };
-
-
-export const useConnect = () => {
-
-  const { isConnect, setConnect, connectPanelVisible, setConnectPanelVisible } = useContext(MainContext)
-
-  const connect = () => {
-    setConnect(true)
-    setConnectPanelVisible(false)
-  }
-
-  const disconnect = () => {
-    setConnect(false)
-  }
-
-  const openConnectPanel = () => {
-    setConnectPanelVisible(true)
-  }
-
-  const closeConnectPanel = () => {
-    setConnectPanelVisible(false)
-  }
-
-
-  return {
-    connect, disconnect, isConnect, connectPanelVisible,
-    openConnectPanel, closeConnectPanel
-  }
-
-}
-
-export const useTransfer = () => {
-
-  const { step, setStep, selectedTransferNFT, setSelectedTransferNFT, userToken } = useContext(MainContext)
-  const [submitLoading, setSubmitLoading] = useState(false)
-
-  const canSelectNFTs = useMemo(() => {
-    return userToken.filter(item => !selectedTransferNFT.includes(item))
-  }, [selectedTransferNFT, userToken])
-
-  const discardChange = () => {
-    setSelectedTransferNFT([])
-  }
-
-  const selectNFT = (token: NFTTokenFormated) => {
-    setSelectedTransferNFT([...selectedTransferNFT, token])
-  }
-
-  const unSelectNFT = (token: NFTTokenFormated) => {
-    setSelectedTransferNFT(selectedTransferNFT.filter(item => item !== token))
-  }
-
-  const verifyTransfer = () => {
-    setStep(Step.Verify)
-  }
-
-  const submitTransfer = async () => {
-    setSubmitLoading(true)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setSubmitLoading(false)
-        setStep(Step.Completed)
-      }, 5000);
-    })
-  }
-
-  const completeToReturn = () => {
-    setSelectedTransferNFT([])
-    backToTransfer()
-  }
-
-  const backToTransfer = () => {
-    setStep(Step.Transfer)
-  }
-
-  return {
-    step,
-    selectNFT,
-    unSelectNFT,
-    verifyTransfer,
-    submitTransfer,
-    backToTransfer,
-    discardChange,
-    selectedTransferNFT,
-    canSelectNFTs,
-    submitLoading,
-    completeToReturn
-  }
-
-}
-
-export const useToken = () => {
-
-  const { allToken, setAllToken } = useContext(MainContext)
-
-  useEffect(() => {
-
-    setAllToken([
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-0", tokenIndex: 0, isOnIC: true, metadata: "1111", nftokenID: "" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-1", tokenIndex: 1, isOnIC: true, metadata: "1111", nftokenID: "" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-2", tokenIndex: 1, isOnIC: false, metadata: "1111", nftokenID: "1" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-3", tokenIndex: 1, isOnIC: true, metadata: "1111", nftokenID: "" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-4", tokenIndex: 1, isOnIC: false, metadata: "1111", nftokenID: "2" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-5", tokenIndex: 1, isOnIC: false, metadata: "1111", nftokenID: "3" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-6", tokenIndex: 1, isOnIC: true, metadata: "1111", nftokenID: "" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-7", tokenIndex: 1, isOnIC: false, metadata: "1111", nftokenID: "4" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-8", tokenIndex: 1, isOnIC: false, metadata: "1111", nftokenID: "5" },
-      { tokenIdentifier: "p2xe7-2ikor-uwiaa-aaaaa-caasv-yaqca-aaaaa-9", tokenIndex: 1, isOnIC: true, metadata: "1111", nftokenID: "" },
-    ].map(item => formatToken(item)))
-
-  }, [setAllToken])
-
-  return {
-    allToken
-  }
-
-}

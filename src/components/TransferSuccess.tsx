@@ -1,5 +1,5 @@
 import { Box, Button, Center, Container, Heading } from "@chakra-ui/react";
-import { useTransfer } from "../context";
+import { useTransfer } from "../hooks";
 import Card from "./Card";
 import { SuccessTransferItem } from "./TransferItem";
 
@@ -18,7 +18,7 @@ const TransferSuccess = () => {
       <Center>
         <Box maxW="670" my="6" flex="1">
           <Card>
-            {selectedTransferNFT.map(item => <SuccessTransferItem nftData={item} />)}
+            {selectedTransferNFT.map(item => <SuccessTransferItem key={item.id} nftData={item} />)}
           </Card>
         </Box>
       </Center>

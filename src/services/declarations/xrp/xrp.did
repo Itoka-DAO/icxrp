@@ -1,0 +1,38 @@
+type XRPAccountManager = 
+ service {
+   addCustodian: (principal) -> (Result_1);
+   getAllPublicKey: () -> (vec PublicKey) query;
+   getMapping: () -> (Result_2) query;
+   getXRPAccount: () -> (Result) query;
+   isRegisteredUser: (principal) -> (bool) query;
+   removeCustodian: (principal) -> (Result_1);
+   setXRPAccount: (text, text) -> (Result);
+   setXRPAccountByCustodian: (principal, text, text) -> (Result);
+   whoAreCustodians: () -> (vec principal) query;
+   whoami: () -> (principal) query;
+ };
+type XRPAccount = 
+ record {
+   privateKey: text;
+   publicKey: PublicKey;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: vec record {
+             principal;
+             XRPAccount;
+           };
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: principal;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: XRPAccount;
+ };
+type PublicKey = text;
+service : () -> XRPAccountManager
