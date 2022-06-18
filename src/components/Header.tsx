@@ -1,4 +1,4 @@
-import { Container, Flex, HStack, Icon, IconButton, Text, VStack } from '@chakra-ui/react'
+import { Container, Flex, HStack, Icon, IconButton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { BiExit } from 'react-icons/bi';
 import { useConnect } from '../hooks';
 import { ellipsisKey, ellipsisShort } from '../utils';
@@ -18,9 +18,11 @@ const Header = () => {
 
         {isConnect && connectData && <HStack align="stretch">
           <VStack color="gray.300" align="stretch">
-            <Text>Welcome User: {ellipsisShort(connectData.principal)}</Text>
-            {connectData.xrp && <Text>XRP Public Key: {ellipsisKey(connectData.xrp.publicKey)}</Text>}
-            {connectData.xrp && <Text>XRP Private Key: {ellipsisKey(connectData.xrp.privateKey)}</Text>}
+            <Tooltip label={connectData.principal}>
+              <Text title={connectData.principal}>Welcome User: {ellipsisShort(connectData.principal)}</Text>
+            </Tooltip>
+            {connectData.xrp && <Tooltip title={connectData.xrp.publicKey}><Text>XRP Public Key: {ellipsisKey(connectData.xrp.publicKey)}</Text></Tooltip>}
+            {connectData.xrp && <Tooltip title={connectData.xrp.privateKey}><Text>XRP Private Key: {ellipsisKey(connectData.xrp.privateKey)}</Text></Tooltip>}
           </VStack>
           <IconButton
             onClick={disconnect}

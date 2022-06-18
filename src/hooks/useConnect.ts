@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { SignIdentity } from '@dfinity/agent';
 import { MainContext } from '../context';
 import { ConnectType } from '../types/connect';
 import { useWallet } from './';
@@ -17,35 +18,28 @@ export const useConnect = () => {
   } = useContext(MainContext);
 
   const connect = async (type: ConnectType) => {
+    let identity: SignIdentity;
+    let connectType: ConnectType;
+
     if (type === ConnectType.InternetIdentity) {
-      await connectII().then((res) => {
-        const principal = res.getPrincipal().toString();
-        getXRPKeys(principal).then((res) => {
-          setConnectData({
-            type: ConnectType.InternetIdentity,
-            principal: principal,
-            xrp: res,
-          });
-        });
-      });
+      connectType = ConnectType.InternetIdentity;
+      identity = await connectII();
+    } else if (type === ConnectType.Stoic) {
+      connectType = ConnectType.Stoic;
+      identity = await connectStoic();
+    } else if (type === ConnectType.Plug) {
+      connectType = ConnectType.Plug;
+      identity = await connectII();
+    } else {
+      throw new Error('Error');
     }
 
-    if (type === ConnectType.Stoic) {
-      await connectStoic().then((res) => {
-        const principal = res.getPrincipal().toString();
-        getXRPKeys(principal).then((res) => {
-          setConnectData({
-            type: ConnectType.InternetIdentity,
-            principal: principal,
-            xrp: res,
-          });
-        });
-      });
-    }
-
-    if (type === ConnectType.Plug) {
-    }
-
+    const tokens = await getXRPKeys(identity);
+    setConnectData({
+      type: connectType,
+      principal: await identity.getPrincipal().toString(),
+      xrp: tokens,
+    });
     setConnect(true);
     setConnectPanelVisible(false);
   };

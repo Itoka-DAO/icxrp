@@ -1,9 +1,6 @@
 import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useWallet } from '../hooks';
-import InternetIdentity from '../services/InternetIdentity';
-// import Stoic from '../services/stoic';
-import { ConnectData, ConnectType } from '../types/connect';
-// import { crossIC2XRP, crossXRP2IC } from '../services';
+import { ConnectData } from '../types/connect';
 import { NFTTokenFormated } from '../types/token';
 
 export enum Step {
@@ -52,7 +49,7 @@ export const MainContext = createContext<MainContextType>(defaultValue);
 
 export const MainProvider = ({ children }: { children: ReactNode }) => {
 
-  const { getXRPKeys } = useWallet()
+  const { getConnectData } = useWallet()
 
   const [isConnect, setConnect] = useState(false)
   const [connectData, setConnectData] = useState<ConnectData>()
@@ -68,30 +65,11 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
     return allToken;
   }, [allToken, isConnect])
 
-  const init = async () => {
-    if (await InternetIdentity.isAuthenticated()) {
-      const identity = await InternetIdentity.getIdentity()
-      const principal = identity.getPrincipal().toString()
-      getXRPKeys(principal).then(res => {
-        setConnect(true)
-        setConnectData({
-          type: ConnectType.InternetIdentity,
-          principal: principal,
-          xrp: res
-        })
-      })
-    }
-    // else if (await Stoic.isAuthenticated()) {
-    //   console.log("Login via Stoic")
-    //   setConnect(true)
-    // }
-    else if (false) {
-      setConnect(true)
-    }
-  }
-
   useEffect(() => {
-    init()
+    getConnectData().then(res => {
+      setConnectData(res)
+      setConnect(true)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Actor, HttpAgent } from '@dfinity/agent';
+import { Actor, HttpAgent, SignIdentity } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
 import { CrossToken2IC, CrossToken2XRP } from '../types/token';
 import { idlFactory as xrpIdlFactory } from './declarations/xrp';
@@ -19,19 +19,20 @@ interface GenerateXRPAccountResult {
   balance: number;
 }
 
-const createActor = (): import('@dfinity/agent').ActorSubclass<
+const createXRPActor = (
+  identity: SignIdentity
+): import('@dfinity/agent').ActorSubclass<
   import('./declarations/xrp/xrp.did')._SERVICE
 > => {
   const agent = new HttpAgent({
     host: 'https://ic0.app',
+    identity,
   });
   return Actor.createActor(xrpIdlFactory, {
     agent,
     canisterId: canisterId_xrp,
   });
 };
-
-const xrpActor = createActor();
 
 export const generateXRPAccount = () => {
   return axios
@@ -51,11 +52,20 @@ export const crossXRP2IC = (token: CrossToken2IC) => {
     .then((res) => res.data);
 };
 
-export const isRegisterUser = async (principal: string) => {
+export const isRegisterUser = async (
+  identity: SignIdentity,
+  principal: string
+) => {
+  const xrpActor = createXRPActor(identity);
   return xrpActor.isRegisteredUser(Principal.fromText(principal));
 };
 
-export const setXRPAccount = async (publicKey: string, privateKey: string) => {
+export const setXRPAccount = async (
+  identity: SignIdentity,
+  publicKey: string,
+  privateKey: string
+) => {
+  const xrpActor = createXRPActor(identity);
   const res = await xrpActor.setXRPAccount(publicKey, privateKey);
   if ('ok' in res) {
     return Promise.resolve(res.ok);
@@ -64,7 +74,8 @@ export const setXRPAccount = async (publicKey: string, privateKey: string) => {
   }
 };
 
-export const getXRPAccount = async () => {
+export const getXRPAccount = async (identity: SignIdentity) => {
+  const xrpActor = createXRPActor(identity);
   const res = await xrpActor.getXRPAccount();
   if ('ok' in res) {
     return Promise.resolve(res.ok);
