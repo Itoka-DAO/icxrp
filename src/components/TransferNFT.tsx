@@ -1,18 +1,11 @@
-import { Box, Button, Container, Heading, HStack, SimpleGrid } from "@chakra-ui/react";
+import { Box, Button, Container, Heading, HStack } from "@chakra-ui/react";
+import { useTransfer } from "../context";
 import Card from "./Card";
 import { ReadyForTransferItem, ReadyToAddTransferItem } from "./TransferItem";
 
-const NFTList: { chain: "XRP" | "ICP", index: string, thumb: string, name: string, type: any }[] = [
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
-  { chain: "ICP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "ready" },
-  { chain: "ICP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "success" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "transfer" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "ready" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "transfer" },
-]
-
 const TransferNFT = () => {
+
+  const { verifyTransfer, selectedTransferNFT, selectNFT, unSelectNFT, canSelectNFTs } = useTransfer()
 
   return (
     <Container maxW="1200">
@@ -21,21 +14,24 @@ const TransferNFT = () => {
         <Heading color="white" fontSize="6xl">NFT Transfer</Heading>
       </Box>
 
-      <SimpleGrid columns={2} spacing="14" mb={6}>
+      <HStack spacing="14" justifyContent="space-between" mb="6">
+        <Box flex="1">
+          <Card title="Your Assets">
+            {canSelectNFTs.map(item => <ReadyToAddTransferItem onAddToTransfer={() => selectNFT(item)} nftData={item} />)}
+          </Card>
+        </Box>
 
-        <Card title="Your Assets">
-          {NFTList.map(item => <ReadyToAddTransferItem onAddToTransfer={() => { }} nftData={item} />)}
-        </Card>
+        <Box flex="1">
+          <Card title="Transfer List">
+            {selectedTransferNFT.map(item => <ReadyForTransferItem onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
+          </Card>
+        </Box>
 
-        <Card title="Transfer List">
-          {NFTList.map(item => <ReadyForTransferItem onRemoveFromTransfer={() => { }} nftData={item} />)}
-        </Card>
+      </HStack>
 
-      </SimpleGrid>
-
-      <HStack spacing="14" justifyContent="center">
+      <HStack spacing="14">
         <Button borderRadius="full">Discard Changes</Button>
-        <Button borderRadius="full" bgColor="primary">Proceed to Transfer</Button>
+        <Button borderRadius="full" bgColor="primary" onClick={verifyTransfer}>Proceed to Transfer</Button>
       </HStack>
 
 

@@ -1,7 +1,6 @@
-import { Box, Button, Container, Heading, Text, SimpleGrid, Icon } from "@chakra-ui/react"
-import { useContext, useState } from "react"
+import { Box, Button, Container, Heading, SimpleGrid } from "@chakra-ui/react"
+import { useState } from "react"
 
-import { BsChevronDoubleDown } from 'react-icons/bs'
 
 import ConnectPanel from "../components/AuthPanel"
 import Card from "../components/Card"
@@ -11,19 +10,9 @@ import TransferItem from "../components/TransferItem"
 import TransferNFT from "../components/TransferNFT"
 import TransferSuccess from "../components/TransferSuccess"
 import VerifyTransfer from "../components/VerifyTransfer"
-import { MainContext, useConnect } from "../context"
+import { Step, useConnect, useToken, useTransfer } from "../context"
 
 import BGImg from '../images/holographic.png'
-
-const NFTList: { chain: "XRP" | "ICP", index: string, thumb: string, name: string, type: any }[] = [
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
-  { chain: "ICP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "ready" },
-  { chain: "ICP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "success" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "transfer" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "ready" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "transfer" },
-]
 
 const bodyBG = "linear-gradient(135.6deg, rgba(21, 127, 255, 0.2) -8.76%, rgba(11, 1, 26, 0.2) 43.54%, rgba(11, 1, 26, 0.2) 61.3%, rgba(246, 0, 255, 0.2) 110%), #0B011A;"
 
@@ -31,7 +20,11 @@ const Main = () => {
 
   const [connectPanelVisible, setConnectPanelVisible] = useState(false)
 
-  const { isConnect, connect, openConnectPanel } = useConnect()
+  const { isConnect, openConnectPanel } = useConnect()
+
+  const { step } = useTransfer()
+
+  const { allToken } = useToken()
 
   return (
     <Box bg={bodyBG}>
@@ -56,7 +49,7 @@ const Main = () => {
         <Container maxW="1200">
           <Card title="All NFT Listing">
             <SimpleGrid columns={2} spacingX="14">
-              {NFTList.map(item => <TransferItem nftData={item} />)}
+              {allToken.map(item => <TransferItem nftData={item} />)}
             </SimpleGrid>
           </Card>
         </Container>
@@ -64,9 +57,9 @@ const Main = () => {
       </Box>}
 
       {isConnect && <>
-        <TransferNFT />
-        <VerifyTransfer />
-        <TransferSuccess />
+        {step === Step.Transfer && <TransferNFT />}
+        {step === Step.Verify && <VerifyTransfer />}
+        {step === Step.Completed && < TransferSuccess />}
       </>}
 
 

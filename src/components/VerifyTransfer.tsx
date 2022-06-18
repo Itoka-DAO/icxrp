@@ -1,18 +1,12 @@
 import { Box, Button, Container, Heading, HStack } from '@chakra-ui/react';
+import { useTransfer } from '../context';
 import Card from './Card';
-import { ReadyToAddTransferItem } from './TransferItem';
-
-const NFTList: { chain: "XRP" | "ICP", index: string, thumb: string, name: string, type: any }[] = [
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
-  { chain: "ICP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "ready" },
-  { chain: "ICP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "success" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "transfer" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "ready" },
-  { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "transfer" },
-]
+import { ReadyForTransferItem } from './TransferItem';
 
 const VerifyTransfer = () => {
+
+  const { submitTransfer, backToTransfer, selectedTransferNFT, unSelectNFT } = useTransfer()
+
   return (
     <Container maxW="1200">
       <Box textAlign="center">
@@ -21,14 +15,14 @@ const VerifyTransfer = () => {
 
       <Box maxW="670" mb="6">
         <Card title="Transfer List">
-          {NFTList.map(item => <ReadyToAddTransferItem onAddToTransfer={() => { }} nftData={item} />)}
+          {selectedTransferNFT.map(item => <ReadyForTransferItem onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
         </Card>
       </Box>
 
 
       <HStack w="full" justifyContent="center">
-        <Button borderRadius="full">Go Back to Edit</Button>
-        <Button borderRadius="full" bgColor="primary">Confirm</Button>
+        <Button borderRadius="full" onClick={backToTransfer}>Go Back to Edit</Button>
+        <Button borderRadius="full" bgColor="primary" onClick={submitTransfer}>Confirm</Button>
       </HStack>
     </Container>
   );

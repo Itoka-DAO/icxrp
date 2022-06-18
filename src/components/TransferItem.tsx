@@ -1,16 +1,18 @@
-import { HStack, Icon, Image, Tag, Text, VStack, Flex, Box } from "@chakra-ui/react";
+import { HStack, Icon, Tag, Text, VStack, Flex } from "@chakra-ui/react";
 import { FiCheckCircle, FiPlusSquare, FiXCircle, FiArrowRight } from 'react-icons/fi'
+import { NFTTokenFormated } from "../types/token";
 
 interface BlockChainTagProps {
-  blockChain: "XRP" | "ICP";
+  // isOnIC: boolean;
+  // blockChain: "XRP" | "ICP";
+  chain: "XRP" | "ICP"
   type?: "added" | "success"
 }
 
-export const BlockChainTag = ({ blockChain, type }: BlockChainTagProps) => {
+export const BlockChainTag = ({ chain, type }: BlockChainTagProps) => {
 
-  const primary = blockChain;
-  const other = (blockChain === "XRP") ? "ICP" : "XRP";
-
+  const primary = chain;
+  const other = chain === "ICP" ? "XRP" : "ICP";
 
   switch (type) {
     case "added":
@@ -39,12 +41,7 @@ interface TransferItemProps {
   onAddToTransfer?: () => void;
   onRemoveFromTransfer?: () => void;
   type?: "added" | "success"
-  nftData: {
-    index: string;
-    name: string;
-    thumb: string;
-    chain: "XRP" | "ICP"
-  }
+  nftData: NFTTokenFormated;
 }
 
 const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData }: TransferItemProps) => {
@@ -52,12 +49,12 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData }: 
   return (
     <Flex align="center" justifyContent="space-between" color="white" fontSize="sm" h="78px" borderBottom="1px solid white" px="4">
       <HStack>
-        <Text>{nftData?.index}</Text>
-        <Image src={nftData?.thumb} />
-        <Text>{nftData?.name}</Text>
+        <Text>{nftData.id}</Text>
+        {/* <Image src={nftData?.thumb} /> */}
+        <Text>{nftData?.tokenIdentifier}</Text>
       </HStack>
       <HStack spacing="6">
-        <BlockChainTag blockChain={nftData.chain} type={type} />
+        <BlockChainTag chain={nftData.chain} type={type} />
         {onAddToTransfer && <VStack spacing="0.5" color="primary" onClick={onAddToTransfer}>
           <Icon fontSize="2xl" as={FiPlusSquare} />
           <Text fontWeight={600}>Add to Transfer</Text>
