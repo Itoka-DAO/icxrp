@@ -1,4 +1,5 @@
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Flex, Heading, HStack, IconButton, Text } from "@chakra-ui/react";
+import { useConnect } from "../context";
 import { DfinityIcon, PlugIcon, StoicIcon } from "./Icons";
 
 interface ConnectPanelProps {
@@ -6,14 +7,16 @@ interface ConnectPanelProps {
   onClose: () => void;
 }
 
-const ConnectPanel = ({ visible, onClose }: ConnectPanelProps) => {
+const ConnectPanel = (props: ConnectPanelProps) => {
+
+  const { connect, connectPanelVisible, closeConnectPanel } = useConnect()
 
   return (
     <Drawer
       size="md"
       placement='right'
-      isOpen={visible}
-      onClose={onClose} >
+      isOpen={connectPanelVisible}
+      onClose={closeConnectPanel} >
       <DrawerOverlay />
       <DrawerContent>
         <DrawerBody bgColor="second" px="20">
@@ -28,6 +31,7 @@ const ConnectPanel = ({ visible, onClose }: ConnectPanelProps) => {
               borderRadius="full"
               colorScheme="blackAlpha"
               fontSize="sm"
+              onClick={connect}
               leftIcon={<DfinityIcon fontSize="4xl" />}>Connect with Internet Identity</Button>
             <Box mt="40">
               <Text fontWeight="700" mb="4">or connect with</Text>

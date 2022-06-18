@@ -15,19 +15,19 @@ export const BlockChainTag = ({ blockChain, type }: BlockChainTagProps) => {
   switch (type) {
     case "added":
       return (
-        <Box>
+        <HStack spacing="1">
           <Tag w="44px" textAlign="center" fontWeight={700} color="white" bgColor={primary.toLowerCase()}>{primary}</Tag>
-          <Icon fontSize="2xl" as={FiArrowRight} />
+          <Icon color="gray.500" fontSize="2xl" as={FiArrowRight} />
           <Tag w="44px" textAlign="center" fontWeight={700} color={other.toLowerCase()} bgColor="transparent">{other}</Tag>
-        </Box>
+        </HStack>
       )
     case "success":
       return (
-        <Box>
+        <HStack spacing="1">
           <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={other.toLowerCase()}>{other}</Tag>
-          <Icon fontSize="2xl" as={FiArrowRight} />
+          <Icon color="gray.500" fontSize="2xl" as={FiArrowRight} />
           <Tag w="44px" textAlign="center" fontWeight={700} bgColor={primary.toLowerCase()} color="white">{primary}</Tag>
-        </Box>
+        </HStack>
       )
     default:
       return <Tag w="44px" textAlign="center" fontWeight={700} color="white" bgColor={primary.toLowerCase()}>{primary}</Tag>
@@ -50,15 +50,15 @@ interface TransferItemProps {
 const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData }: TransferItemProps) => {
 
   return (
-    <Flex align="center" justifyContent="space-between" color="white" fontSize="sm">
+    <Flex align="center" justifyContent="space-between" color="white" fontSize="sm" h="78px" borderBottom="1px solid white" px="4">
       <HStack>
         <Text>{nftData?.index}</Text>
         <Image src={nftData?.thumb} />
         <Text>{nftData?.name}</Text>
       </HStack>
-      <HStack>
+      <HStack spacing="6">
         <BlockChainTag blockChain={nftData.chain} type={type} />
-        {onAddToTransfer && <VStack color="primary" onClick={onAddToTransfer}>
+        {onAddToTransfer && <VStack spacing="0.5" color="primary" onClick={onAddToTransfer}>
           <Icon fontSize="2xl" as={FiPlusSquare} />
           <Text fontWeight={600}>Add to Transfer</Text>
         </VStack>}

@@ -1,5 +1,8 @@
-import { Box, Button, Container, Heading, SimpleGrid } from "@chakra-ui/react"
-import { useState } from "react"
+import { Box, Button, Container, Heading, Text, SimpleGrid, Icon } from "@chakra-ui/react"
+import { useContext, useState } from "react"
+
+import { BsChevronDoubleDown } from 'react-icons/bs'
+
 import ConnectPanel from "../components/AuthPanel"
 import Card from "../components/Card"
 import Footer from "../components/Footer"
@@ -8,6 +11,9 @@ import TransferItem from "../components/TransferItem"
 import TransferNFT from "../components/TransferNFT"
 import TransferSuccess from "../components/TransferSuccess"
 import VerifyTransfer from "../components/VerifyTransfer"
+import { MainContext, useConnect } from "../context"
+
+import BGImg from '../images/holographic.png'
 
 const NFTList: { chain: "XRP" | "ICP", index: string, thumb: string, name: string, type: any }[] = [
   { chain: "XRP", index: "001", name: "Bazahei #0asd8", thumb: "", type: "normal" },
@@ -24,7 +30,8 @@ const bodyBG = "linear-gradient(135.6deg, rgba(21, 127, 255, 0.2) -8.76%, rgba(1
 const Main = () => {
 
   const [connectPanelVisible, setConnectPanelVisible] = useState(false)
-  const [isConnect] = useState(true)
+
+  const { isConnect, connect, openConnectPanel } = useConnect()
 
   return (
     <Box bg={bodyBG}>
@@ -32,17 +39,23 @@ const Main = () => {
       <Header />
 
       {/* body */}
-      <Box textAlign="center">
-        <Heading color="white" fontSize="6xl" lineHeight="tall">Internet Computer - Ripple Bridge-test</Heading>
+      {!isConnect && <Box h="100vh" textAlign="center" bgImage={BGImg} bgRepeat="no-repeat" bgPos="center">
+        <Heading color="white" fontSize="6xl" lineHeight="tall">Internet Computer - Ripple Bridge</Heading>
         <Heading color="white" fontSize="3xl" as="h3" lineHeight="tall">An Infrastrucutre for Multi-chain Entertainment</Heading>
-        <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" onClick={() => setConnectPanelVisible(true)}>Start Transfer</Button>
-      </Box>
+        {/* <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" onClick={() => setConnectPanelVisible(true)}>Start Transfer</Button> */}
+        <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" onClick={openConnectPanel}>Start Transfer</Button>
 
-      {isConnect && <Box>
-        <Heading textAlign="center" color="white">All NFT Listing</Heading>
+        {/* <Box color="white">
+          <Text>See All NFT Listing</Text>
+          <Icon fontWeight={700} fontSize="2xl" as={BsChevronDoubleDown} />
+        </Box> */}
+
+      </Box>}
+
+      {!isConnect && <Box mb="140">
         <Container maxW="1200">
-          <Card>
-            <SimpleGrid columns={2} spacing="14">
+          <Card title="All NFT Listing">
+            <SimpleGrid columns={2} spacingX="14">
               {NFTList.map(item => <TransferItem nftData={item} />)}
             </SimpleGrid>
           </Card>
