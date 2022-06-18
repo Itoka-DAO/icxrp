@@ -8,3 +8,8 @@ export const formatToken = (token: NFTToken): NFTTokenFormated => {
     tokenIdentifier: token.tokenIdentifier,
   };
 };
+
+export const ellipsis = (str: string): string => {
+  const arr = str.split('-');
+  return `${arr[0]}-${arr[1]}****${arr[arr.length - 2]}-${arr[arr.length - 1]}`;
+};

@@ -5,7 +5,7 @@ import { ReadyForTransferItem, ReadyToAddTransferItem } from "./TransferItem";
 
 const TransferNFT = () => {
 
-  const { verifyTransfer, selectedTransferNFT, selectNFT, unSelectNFT, canSelectNFTs } = useTransfer()
+  const { verifyTransfer, selectedTransferNFT, selectNFT, unSelectNFT, canSelectNFTs, discardChange } = useTransfer()
 
   return (
     <Container maxW="1200">
@@ -14,7 +14,7 @@ const TransferNFT = () => {
         <Heading color="white" fontSize="6xl">NFT Transfer</Heading>
       </Box>
 
-      <HStack spacing="14" justifyContent="space-between" mb="6">
+      <HStack spacing="14" justifyContent="space-between" mb="6" mt="12">
         <Box flex="1">
           <Card title="Your Assets">
             {canSelectNFTs.map(item => <ReadyToAddTransferItem onAddToTransfer={() => selectNFT(item)} nftData={item} />)}
@@ -29,9 +29,9 @@ const TransferNFT = () => {
 
       </HStack>
 
-      <HStack spacing="14">
-        <Button borderRadius="full">Discard Changes</Button>
-        <Button borderRadius="full" bgColor="primary" onClick={verifyTransfer}>Proceed to Transfer</Button>
+      <HStack spacing="14" justifyContent="center">
+        <Button width="186px" borderRadius="full" onClick={discardChange}>Discard Changes</Button>
+        <Button width="186px" borderRadius="full" bgColor="primary" onClick={verifyTransfer} disabled={selectedTransferNFT.length === 0}>Proceed to Transfer</Button>
       </HStack>
 
 

@@ -1,6 +1,7 @@
-import { HStack, Icon, Tag, Text, VStack, Flex } from "@chakra-ui/react";
+import { HStack, Icon, Tag, Text, VStack, Flex, Tooltip } from "@chakra-ui/react";
 import { FiCheckCircle, FiPlusSquare, FiXCircle, FiArrowRight } from 'react-icons/fi'
 import { NFTTokenFormated } from "../types/token";
+import { ellipsis } from "../utils";
 
 interface BlockChainTagProps {
   // isOnIC: boolean;
@@ -51,7 +52,9 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData }: 
       <HStack>
         <Text>{nftData.id}</Text>
         {/* <Image src={nftData?.thumb} /> */}
-        <Text>{nftData?.tokenIdentifier}</Text>
+        <Tooltip closeOnMouseDown={false} label={nftData.tokenIdentifier}>
+          {ellipsis(nftData?.tokenIdentifier)}
+        </Tooltip>
       </HStack>
       <HStack spacing="6">
         <BlockChainTag chain={nftData.chain} type={type} />

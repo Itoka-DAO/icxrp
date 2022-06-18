@@ -1,11 +1,11 @@
-import { Box, Button, Container, Heading } from "@chakra-ui/react";
+import { Box, Button, Center, Container, Heading } from "@chakra-ui/react";
 import { useTransfer } from "../context";
 import Card from "./Card";
 import { SuccessTransferItem } from "./TransferItem";
 
 const TransferSuccess = () => {
 
-  const { backToTransfer, selectedTransferNFT } = useTransfer()
+  const { completeToReturn, selectedTransferNFT } = useTransfer()
 
   return (
     <Container maxW="1200">
@@ -15,13 +15,17 @@ const TransferSuccess = () => {
         <Heading color="white" fontSize="6xl">Your Transfer is Completed!</Heading>
       </Box>
 
-      <Box maxW="670" mb="6">
-        <Card>
-          {selectedTransferNFT.map(item => <SuccessTransferItem nftData={item} />)}
-        </Card>
-      </Box>
+      <Center>
+        <Box maxW="670" my="6" flex="1">
+          <Card>
+            {selectedTransferNFT.map(item => <SuccessTransferItem nftData={item} />)}
+          </Card>
+        </Box>
+      </Center>
 
-      <Button borderRadius="full" bgColor="primary" onClick={backToTransfer}>Return to NFT Transfer</Button>
+      <Center>
+        <Button borderRadius="full" bgColor="primary" onClick={completeToReturn}>Return to NFT Transfer</Button>
+      </Center>
 
     </Container>
   )

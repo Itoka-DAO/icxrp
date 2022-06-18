@@ -27,7 +27,7 @@ const Main = () => {
   const { allToken } = useToken()
 
   return (
-    <Box bg={bodyBG}>
+    <Box bg={bodyBG} minHeight="100vh">
       {/* header */}
       <Header />
 
@@ -56,15 +56,15 @@ const Main = () => {
 
       </Box>}
 
-      {isConnect && <>
+      {isConnect && <Box pb="14">
         {step === Step.Transfer && <TransferNFT />}
         {step === Step.Verify && <VerifyTransfer />}
         {step === Step.Completed && < TransferSuccess />}
-      </>}
+      </Box>}
 
 
       {/* footer */}
-      <Footer />
+      {!isConnect && <Footer />}
 
       <ConnectPanel visible={connectPanelVisible} onClose={() => setConnectPanelVisible(false)} />
 

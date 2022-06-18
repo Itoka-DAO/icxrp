@@ -108,7 +108,7 @@ export const useTransfer = () => {
     return userToken.filter(item => !selectedTransferNFT.includes(item))
   }, [selectedTransferNFT, userToken])
 
-  const discordChange = () => {
+  const discardChange = () => {
     setSelectedTransferNFT([])
   }
 
@@ -132,13 +132,16 @@ export const useTransfer = () => {
         setStep(Step.Completed)
       }, 5000);
     })
+  }
 
+  const completeToReturn = () => {
+    setSelectedTransferNFT([])
+    backToTransfer()
   }
 
   const backToTransfer = () => {
     setStep(Step.Transfer)
   }
-
 
   return {
     step,
@@ -147,10 +150,11 @@ export const useTransfer = () => {
     verifyTransfer,
     submitTransfer,
     backToTransfer,
-    discordChange,
+    discardChange,
     selectedTransferNFT,
     canSelectNFTs,
-    submitLoading
+    submitLoading,
+    completeToReturn
   }
 
 }
