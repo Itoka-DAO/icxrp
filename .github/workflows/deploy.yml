@@ -5,10 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: echo "@wangcode:registry=https://npm.pkg.github.com/wangcode" > ~/.npmrc
-      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" > ~/.npmrc
-      - run: echo "registry=https://registry.npmjs.org" > ~/.npmrc
-      - run: echo "@psychedelic:registry=https://npm.pkg.github.com" > ~/.npmrc
+      - run: echo "@wangcode:registry=https://npm.pkg.github.com/wangcode" > ./.npmrc
+      - run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" > ./.npmrc
+      - run: echo "registry=https://registry.npmjs.org" > ./.npmrc
+      - run: echo "@psychedelic:registry=https://npm.pkg.github.com" > ./.npmrc
+      - run: cat ./.npmrc
       - uses: bahmutov/npm-install@v1
       - run: yarn
       - run: yarn build
