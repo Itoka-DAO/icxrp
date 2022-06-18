@@ -102,6 +102,7 @@ export const useConnect = () => {
 export const useTransfer = () => {
 
   const { step, setStep, selectedTransferNFT, setSelectedTransferNFT, userToken } = useContext(MainContext)
+  const [submitLoading, setSubmitLoading] = useState(false)
 
   const canSelectNFTs = useMemo(() => {
     return userToken.filter(item => !selectedTransferNFT.includes(item))
@@ -123,8 +124,15 @@ export const useTransfer = () => {
     setStep(Step.Verify)
   }
 
-  const submitTransfer = () => {
-    setStep(Step.Completed)
+  const submitTransfer = async () => {
+    setSubmitLoading(true)
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setSubmitLoading(false)
+        setStep(Step.Completed)
+      }, 5000);
+    })
+
   }
 
   const backToTransfer = () => {
@@ -141,7 +149,8 @@ export const useTransfer = () => {
     backToTransfer,
     discordChange,
     selectedTransferNFT,
-    canSelectNFTs
+    canSelectNFTs,
+    submitLoading
   }
 
 }

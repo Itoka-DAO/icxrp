@@ -1,7 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 
-const Card = (props: { children: React.ReactNode, title?: string }) => {
+const Card = (props: { children: React.ReactNode, title?: string, loading?: boolean }) => {
 
   return (
     <Box>

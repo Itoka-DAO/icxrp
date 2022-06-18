@@ -16,7 +16,7 @@ const TransferSuccess = () => {
       </Box>
 
       <Box maxW="670" mb="6">
-        <Card title="Transfer List">
+        <Card>
           {selectedTransferNFT.map(item => <SuccessTransferItem nftData={item} />)}
         </Card>
       </Box>
