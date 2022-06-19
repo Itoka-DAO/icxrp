@@ -21,7 +21,7 @@ const VerifyTransfer = () => {
           </Card>
         </Box>}
 
-        {submitLoading && <Box>
+        {submitLoading && <Box py="40">
           <Spinner
             thickness='4px'
             speed='0.65s'

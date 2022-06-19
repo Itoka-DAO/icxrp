@@ -1,16 +1,18 @@
-import { Agent, SignIdentity } from '@dfinity/agent';
+import { Agent } from '@dfinity/agent';
 import { IDL } from '@dfinity/candid';
 
 const plug = window.ic.plug;
 
-const connect = async (): Promise<SignIdentity> => {
+const connect = async (): Promise<boolean> => {
   return new Promise(async (resolve) => {
     isAuthenticated().then((res) => {
+      console.log('Plug: isAuthenticated', res);
       if (res) {
-        resolve(getIdentity());
+        resolve(true);
       } else {
         plug.requestConnect().then((res) => {
-          resolve(getIdentity());
+          console.log(res, 'request connect plug');
+          resolve(true);
         });
       }
     });
@@ -19,11 +21,6 @@ const connect = async (): Promise<SignIdentity> => {
 
 const isAuthenticated = async () => {
   return plug.isConnected();
-};
-
-const getIdentity = async (): Promise<SignIdentity> => {
-  plug.requestConnect().then((res) => {});
-  return '' as unknown as SignIdentity;
 };
 
 const getAgent = async (): Promise<Agent> => {

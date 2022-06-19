@@ -42,8 +42,8 @@ const createXRPActor = async (
           host: 'https://ic0.app',
           identity:
             connectType === ConnectType.InternetIdentity
-              ? await InternetIdentity.getIdentity()
-              : await Stoic.getIdentity(),
+              ? InternetIdentity.getIdentity()
+              : Stoic.getIdentity(),
         }),
         canisterId: canisterId_xrp,
       });
@@ -73,8 +73,8 @@ const createBrageActor = async (
           host: 'https://ic0.app',
           identity:
             connectType === ConnectType.InternetIdentity
-              ? await InternetIdentity.getIdentity()
-              : await Stoic.getIdentity(),
+              ? InternetIdentity.getIdentity()
+              : Stoic.getIdentity(),
         }),
         canisterId: canisterId_bridge,
       });
@@ -103,8 +103,8 @@ const createNFTActor = async (
           host: 'https://ic0.app',
           identity:
             connectType === ConnectType.InternetIdentity
-              ? await InternetIdentity.getIdentity()
-              : await Stoic.getIdentity(),
+              ? InternetIdentity.getIdentity()
+              : Stoic.getIdentity(),
         }),
         canisterId: canisterId_nft,
       });
@@ -216,7 +216,7 @@ export const getXRPNFTokens = async (publicKey: string, privateKey: string) => {
   return NFTokenIds;
 };
 
-export const transferNFT = (
+export const transferNFT = async (
   principal: string,
   identifier: string,
   connectType: ConnectType
@@ -231,7 +231,7 @@ export const transferNFT = (
     subaccount: [],
   };
 
-  const nftActor = createNFTActor(connectType);
+  const nftActor = await createNFTActor(connectType);
   // @ts-ignore
   return nftActor.transfer(data);
 };

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { SignIdentity } from '@dfinity/agent';
-import { MainContext } from '../context';
+import { MainContext, Step } from '../context';
 import { ConnectType } from '../types/connect';
 import { useWallet } from './';
 
@@ -23,6 +23,7 @@ export const useConnect = () => {
     connectData,
     setConnectData,
     logining,
+    setStep,
   } = useContext(MainContext);
 
   const connect = async (type: ConnectType) => {
@@ -49,9 +50,9 @@ export const useConnect = () => {
     }
 
     setConnect(true);
+    setConnectPanelVisible(false);
     const tokens = await getXRPKeys(connectType, principal);
     setConnectData({ type: connectType, identity, principal, xrp: tokens });
-    setConnectPanelVisible(false);
   };
 
   const disconnect = async () => {
@@ -67,6 +68,7 @@ export const useConnect = () => {
       await disconnectPlug();
     }
 
+    setStep(Step.Transfer);
     setConnect(false);
     setConnectData(undefined);
   };

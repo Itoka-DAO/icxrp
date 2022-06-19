@@ -1,11 +1,12 @@
 import { Box, Button, Container, Heading, HStack } from "@chakra-ui/react";
-import { useTransfer } from "../hooks";
+import { useTransfer, useToken } from "../hooks";
 import Card from "./Card";
 import { ReadyForTransferItem, ReadyToAddTransferItem } from "./TransferItem";
 
 const TransferNFT = () => {
 
   const { verifyTransfer, selectedTransferNFT, selectNFT, unSelectNFT, canSelectNFTs, discardChange } = useTransfer()
+  const { loading } = useToken()
 
   return (
     <Container maxW="1200">
@@ -16,7 +17,7 @@ const TransferNFT = () => {
 
       <HStack spacing="14" justifyContent="space-between" mb="6" mt="12">
         <Box flex="1">
-          <Card title="Your Assets">
+          <Card title="Your Assets" loading={loading}>
             {canSelectNFTs.map(item => <ReadyToAddTransferItem key={item.tokenId} onAddToTransfer={() => selectNFT(item)} nftData={item} />)}
           </Card>
         </Box>

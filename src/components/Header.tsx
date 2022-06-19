@@ -1,4 +1,4 @@
-import { Container, Flex, HStack, Icon, IconButton, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Container, Flex, HStack, Icon, IconButton, Text, Tooltip, useClipboard, VStack, Link } from '@chakra-ui/react'
 import { BiExit } from 'react-icons/bi';
 import { useConnect } from '../hooks';
 import { ellipsisKey, ellipsisShort } from '../utils';
@@ -6,6 +6,10 @@ import { ellipsisKey, ellipsisShort } from '../utils';
 const Header = () => {
 
   const { isConnect, disconnect, connectData } = useConnect()
+
+  const { onCopy } = useClipboard(connectData?.principal || "")
+  const { onCopy: onCopyPublicKey } = useClipboard(connectData?.xrp?.publicKey || "")
+  const { onCopy: onCopyPrivateKey } = useClipboard(connectData?.xrp?.privateKey || "")
 
   return (
     <Container maxW="1440" py="10">
@@ -19,10 +23,10 @@ const Header = () => {
         {isConnect && connectData && <HStack align="stretch">
           <VStack color="gray.300" align="stretch">
             <Tooltip label={connectData.principal}>
-              <Text title={connectData.principal}>Welcome User: {ellipsisShort(connectData.principal)}</Text>
+              <Text title={connectData.principal}>Welcome User: <Link onClick={onCopy}>{ellipsisShort(connectData.principal)}</Link> </Text>
             </Tooltip>
-            {connectData.xrp && <Tooltip title={connectData.xrp.publicKey}><Text>XRP Public Key: {ellipsisKey(connectData.xrp.publicKey)}</Text></Tooltip>}
-            {connectData.xrp && <Tooltip title={connectData.xrp.privateKey}><Text>XRP Private Key: {ellipsisKey(connectData.xrp.privateKey)}</Text></Tooltip>}
+            {connectData.xrp && <Text>XRP Public Key: <Link onClick={onCopyPublicKey}>{ellipsisKey(connectData.xrp.publicKey)}</Link> </Text>}
+            {connectData.xrp && <Text>XRP Private Key: <Link onClick={onCopyPrivateKey}>{ellipsisKey(connectData.xrp.privateKey)}</Link> </Text>}
           </VStack>
           <IconButton
             onClick={disconnect}

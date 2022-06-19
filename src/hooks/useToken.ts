@@ -4,14 +4,24 @@ import { getAllTokens } from '../services';
 import { formatToken } from '../utils';
 
 export const useToken = () => {
-  const { allToken, setAllToken, userToken } = useContext(MainContext);
+  const {
+    allToken,
+    setAllToken,
+    userToken,
+    loadingToken,
+    setLoadingToken,
+    setUserTokenInit,
+    loadingUserToken,
+  } = useContext(MainContext);
 
   const initToken = useCallback(() => {
     console.log('init token');
+    setUserTokenInit(false);
+    setLoadingToken(true);
     setAllToken([]);
     getAllTokens().then((res) => {
-      const list = res.map((item) => formatToken(item));
-      setAllToken(list);
+      setAllToken(res.map((item) => formatToken(item)));
+      setLoadingToken(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -25,5 +35,6 @@ export const useToken = () => {
     allToken,
     userToken,
     initToken,
+    loading: loadingToken || loadingUserToken,
   };
 };

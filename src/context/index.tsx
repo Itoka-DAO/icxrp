@@ -28,6 +28,11 @@ interface MainContextType {
   userToken: NFTokenFormated[];
   logining: boolean;
   setLogining: React.Dispatch<React.SetStateAction<boolean>>;
+  loadingToken: boolean;
+  setLoadingToken: React.Dispatch<React.SetStateAction<boolean>>;
+  loadingUserToken: boolean;
+  setLoadingUserToken: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserTokenInit: React.Dispatch<React.SetStateAction<boolean>>;
   // setUserToken: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
 }
 
@@ -46,7 +51,12 @@ const defaultValue = {
   setAllToken: () => { },
   userToken: [],
   logining: false,
-  setLogining: () => { }
+  setLogining: () => { },
+  loadingToken: false,
+  setLoadingToken: () => { },
+  loadingUserToken: false,
+  setLoadingUserToken: () => { },
+  setUserTokenInit: () => { }
   // setUserToken: () => { }
 };
 
@@ -71,10 +81,13 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
   const [userTokenInit, setUserTokenInit] = useState(false)
 
   const [logining, setLogining] = useState(true)
+  const [loadingToken, setLoadingToken] = useState(false)
+  const [loadingUserToken, setLoadingUserToken] = useState(false)
 
   const getAllUserToken = useCallback(async () => {
     if (!isConnect || !connectData || !connectData.xrp || allToken.length === 0) return [];
     setUserTokenInit(true);
+    setLoadingUserToken(true)
     console.log("Get user IC Tokens")
     const userICTokenIndexs = await getUserICTokenIndexs(connectData.principal);
 
@@ -88,6 +101,7 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
     })
 
     console.log("allXRP Tokens", allUserTokens)
+    setLoadingUserToken(false)
     return allUserTokens
   }, [allToken, connectData, isConnect])
 
@@ -128,7 +142,10 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
       step, setStep,
       selectedTransferNFT, setSelectedTransferNFT,
       allToken, setAllToken, userToken,
-      logining, setLogining
+      logining, setLogining,
+      loadingToken, setLoadingToken,
+      setUserTokenInit,
+      loadingUserToken, setLoadingUserToken
     }}>
       {children}
     </MainContext.Provider>

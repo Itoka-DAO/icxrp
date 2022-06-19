@@ -1,19 +1,21 @@
-import { Box, Flex, HStack, Heading, Divider, VStack, Link, Container } from "@chakra-ui/react"
+import { Box, Flex, HStack, Heading, Divider, VStack, Link, Container, Image } from "@chakra-ui/react"
 import { FaTwitter, FaDiscord, FaSoundcloud, FaMedium, FaGithub } from "react-icons/fa"
 import IconLink from "./IconLink"
+import dfinityLogo from '../images/dfinitylogo.png'
+import xrpLogo from '../images/xrplogo.png'
 
 const Footer = () => {
   return (
     <Box pb="8" pt="6" bgColor="blackAlpha.200">
       <Container maxW="1280px">
-        <Flex>
+        <Flex justifyContent="space-between">
           <HStack spacing="14" align="stretch">
             <Box w="300px">
               <Heading color="whiteAlpha.600" as="h4" fontSize="xl">NAVIGATE</Heading>
               <Divider my="2" borderColor="primary" />
               <VStack spacing="-0.5" align="stretch" fontSize="xl" fontWeight={700} color="white">
-                <Link href = "https://itoka.xyz">Itoka Home</Link>
-                <Link href = "https://ku323-qyaaa-aaaai-ackgq-cai.ic0.app/airdrop">Muxiv</Link>
+                <Link href="https://itoka.xyz">Itoka Home</Link>
+                <Link href="https://ku323-qyaaa-aaaai-ackgq-cai.ic0.app/airdrop">Muxiv</Link>
               </VStack>
             </Box>
 
@@ -29,6 +31,10 @@ const Footer = () => {
               </VStack>
             </Box>
           </HStack>
+          <VStack w="186px">
+            <Link><Image src={dfinityLogo} /></Link>
+            <Link><Image src={xrpLogo} /></Link>
+          </VStack>
         </Flex>
 
         <Box mt="4" fontSize="xs" color="white">© 2022. All rights reserved</Box>
