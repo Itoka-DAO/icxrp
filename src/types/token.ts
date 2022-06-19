@@ -6,7 +6,7 @@ export interface NFTToken {
   nftokenID: string;
 }
 
-export interface NFTTokenFormated {
+export interface NFTokenFormated {
   id: string | number;
   chain: 'XRP' | 'ICP';
   metadata: string;

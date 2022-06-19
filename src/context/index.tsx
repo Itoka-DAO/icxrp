@@ -1,7 +1,8 @@
-import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useWallet } from '../hooks';
+import { getUserICTokenIndexs } from '../services';
 import { ConnectData } from '../types/connect';
-import { NFTTokenFormated } from '../types/token';
+import { NFTokenFormated } from '../types/token';
 
 export enum Step {
   Transfer,
@@ -20,12 +21,12 @@ interface MainContextType {
   setConnectPanelVisible: React.Dispatch<React.SetStateAction<boolean>>;
   step: Step,
   setStep: React.Dispatch<React.SetStateAction<Step>>;
-  selectedTransferNFT: NFTTokenFormated[];
-  setSelectedTransferNFT: React.Dispatch<React.SetStateAction<NFTTokenFormated[]>>;
-  allToken: NFTTokenFormated[];
-  setAllToken: React.Dispatch<React.SetStateAction<NFTTokenFormated[]>>;
-  userToken: NFTTokenFormated[];
-  // setUserToken: React.Dispatch<React.SetStateAction<NFTTokenFormated[]>>;
+  selectedTransferNFT: NFTokenFormated[];
+  setSelectedTransferNFT: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
+  allToken: NFTokenFormated[];
+  setAllToken: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
+  userToken: NFTokenFormated[];
+  // setUserToken: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
 }
 
 const defaultValue = {
@@ -57,13 +58,33 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
 
   const [step, setStep] = useState(Step.Transfer)
 
-  const [selectedTransferNFT, setSelectedTransferNFT] = useState<NFTTokenFormated[]>([])
+  const [selectedTransferNFT, setSelectedTransferNFT] = useState<NFTokenFormated[]>([])
 
-  const [allToken, setAllToken] = useState<NFTTokenFormated[]>([])
-  const userToken = useMemo(() => {
-    if (!isConnect) return []
-    return allToken;
-  }, [allToken, isConnect])
+  const [allToken, setAllToken] = useState<NFTokenFormated[]>([])
+
+  const [userToken, setUserToken] = useState<NFTokenFormated[]>([])
+
+  const getAllUserToken = useCallback(async () => {
+    if (!isConnect || !connectData || !connectData.xrp || allToken.length === 0) return [];
+    console.log("Get user IC Tokens")
+    const userICTokenIndexs = await getUserICTokenIndexs(connectData.principal);
+    const allICTokens = allToken.filter((item) =>
+      userICTokenIndexs.includes(item.id as number)
+    );
+    console.log("Get user XRP Tokens")
+    // const allXRPTokens = getXRPNFTokens(
+    //   connectData.xrp.publicKey,
+    //   connectData.xrp.privateKey
+    // );
+    return [...allICTokens]
+  }, [allToken, connectData, isConnect])
+
+  useEffect(() => {
+    console.log("getToken")
+    getAllUserToken().then(res => {
+      setUserToken(res)
+    })
+  }, [getAllUserToken])
 
   useEffect(() => {
     getConnectData().then(res => {

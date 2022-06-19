@@ -1,15 +1,16 @@
 import { useContext, useState, useMemo } from 'react';
 import { MainContext, Step } from '../context';
-import { NFTTokenFormated } from '../types/token';
+import { crossIC2XRP, crossXRP2IC } from '../services';
+import { NFTokenFormated } from '../types/token';
+import { useConnect } from './useConnect';
+import { useToken } from './useToken';
 
 export const useTransfer = () => {
-  const {
-    step,
-    setStep,
-    selectedTransferNFT,
-    setSelectedTransferNFT,
-    userToken,
-  } = useContext(MainContext);
+  const { step, setStep, selectedTransferNFT, setSelectedTransferNFT } =
+    useContext(MainContext);
+
+  const { isConnect, connectData } = useConnect();
+  const { userToken } = useToken();
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const canSelectNFTs = useMemo(() => {
@@ -20,11 +21,11 @@ export const useTransfer = () => {
     setSelectedTransferNFT([]);
   };
 
-  const selectNFT = (token: NFTTokenFormated) => {
+  const selectNFT = (token: NFTokenFormated) => {
     setSelectedTransferNFT([...selectedTransferNFT, token]);
   };
 
-  const unSelectNFT = (token: NFTTokenFormated) => {
+  const unSelectNFT = (token: NFTokenFormated) => {
     setSelectedTransferNFT(
       selectedTransferNFT.filter((item) => item !== token)
     );
@@ -35,17 +36,20 @@ export const useTransfer = () => {
   };
 
   const submitTransfer = async () => {
+    if (!isConnect || !connectData?.xrp) return;
     setSubmitLoading(true);
-
+    const CrossPayload = {
+      xrpPublicKey: connectData.xrp.publicKey,
+      xrpPrivateKey: connectData.xrp.privateKey,
+      principal: connectData.principal,
+    };
     selectedTransferNFT.map((item) => {
       if (item.chain === 'ICP') {
-        // crossIC2XRP()
+        crossIC2XRP({ ...CrossPayload, TokenIndex: Number(item.id) });
       }
-
       if (item.chain === 'XRP') {
-        // crossXRP2IC()
+        crossXRP2IC({ ...CrossPayload, NFTokenID: item.id.toString() });
       }
-
       return item;
     });
 
