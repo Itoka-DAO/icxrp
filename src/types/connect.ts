@@ -9,7 +9,7 @@ export enum ConnectType {
 export interface ConnectData {
   type: ConnectType;
   principal: string;
-  identity: SignIdentity;
+  identity?: SignIdentity;
   xrp?: {
     publicKey: string;
     privateKey: string;

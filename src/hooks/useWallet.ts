@@ -11,50 +11,69 @@ import { ConnectType } from '../types/connect';
 import Plug from '../services/plug';
 
 export const useWallet = () => {
+  const getConnectType = async () => {
+    let connectType: ConnectType | undefined = undefined;
+    if (await InternetIdentity.isAuthenticated()) {
+      connectType = ConnectType.InternetIdentity;
+    } else if (await Plug.isAuthenticated()) {
+      connectType = ConnectType.Plug;
+    } else if (await Stoic.isAuthenticated()) {
+      connectType = ConnectType.Stoic;
+    }
+    return connectType;
+  };
+
   const getConnectData = async () => {
     let connectType: ConnectType;
-    let identity: SignIdentity;
+    let identity: SignIdentity | undefined;
+    let principal: string;
 
     if (await InternetIdentity.isAuthenticated()) {
       connectType = ConnectType.InternetIdentity;
       identity = await InternetIdentity.getIdentity();
+      principal = identity.getPrincipal().toString();
     } else if (await Plug.isAuthenticated()) {
       connectType = ConnectType.Plug;
-      identity = await InternetIdentity.getIdentity();
+      principal =
+        window.ic.plug.principalId ||
+        (await window.ic.plug.getPrincipal()).toString();
+      console.log('Login via plug');
     } else if (await Stoic.isAuthenticated()) {
       connectType = ConnectType.Stoic;
       identity = await Stoic.getIdentity();
+      principal = identity.getPrincipal().toString();
     } else {
       return Promise.reject();
     }
-
-    const tokens = await getXRPKeys(identity);
+    const tokens = await getXRPKeys(connectType, principal);
 
     return {
       type: connectType,
       identity,
-      principal: await identity.getPrincipal().toString(),
+      principal,
       xrp: tokens,
     };
   };
 
   const getXRPKeys = (
-    identity: SignIdentity
+    connectType: ConnectType,
+    principal: string
+    // identity: SignIdentity
   ): Promise<{ publicKey: string; privateKey: string }> => {
-    const principal = identity.getPrincipal().toString();
-    return isRegisterUser(identity, principal).then((res) => {
+    // const principal = identity.getPrincipal().toString();
+    return isRegisterUser(principal).then((res) => {
       console.log('isRegisterUser', res);
       if (res) {
         console.log('get XRP Account');
-        return getXRPAccount(identity);
+        return getXRPAccount(connectType);
       } else {
         console.log('generate XRP Account');
         return generateXRPAccount().then((res) => {
           console.log('set XRP Account', res);
           return setXRPAccount(
-            identity,
             res.account.classicAddress,
-            res.account.secret
+            res.account.secret,
+            connectType
           );
         });
       }

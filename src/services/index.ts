@@ -5,6 +5,10 @@ import { CrossToken2IC, CrossToken2XRP } from '../types/token';
 import { idlFactory as xrpIdlFactory } from './declarations/xrp';
 import { idlFactory as brageIdlFactory } from './declarations/bridge';
 import { idlFactory as nftIdlFactory } from './declarations/nft';
+import { ConnectType } from '../types/connect';
+import InternetIdentity from './InternetIdentity';
+import Stoic from './stoic';
+import Plug from './plug';
 
 const canisterId_xrp = 'e7vz4-wqaaa-aaaai-aclha-cai';
 const canisterId_nft = 'n46fk-6qaaa-aaaai-ackxa-cai';
@@ -21,46 +25,95 @@ interface GenerateXRPAccountResult {
   balance: number;
 }
 
-const createXRPActor = (
-  identity: SignIdentity
-): import('@dfinity/agent').ActorSubclass<
-  import('./declarations/xrp/xrp.did')._SERVICE
+const createXRPActor = async (
+  connectType?: ConnectType
+): Promise<
+  import('@dfinity/agent').ActorSubclass<
+    import('./declarations/xrp/xrp.did')._SERVICE
+  >
 > => {
-  return Actor.createActor(xrpIdlFactory, {
-    agent: new HttpAgent({
-      host: 'https://ic0.app',
-      identity,
-    }),
-    canisterId: canisterId_xrp,
-  });
+  switch (connectType) {
+    case ConnectType.Plug:
+      return Plug.getActor(canisterId_xrp, xrpIdlFactory);
+    case ConnectType.InternetIdentity:
+    case ConnectType.Stoic:
+      return Actor.createActor(xrpIdlFactory, {
+        agent: new HttpAgent({
+          host: 'https://ic0.app',
+          identity:
+            connectType === ConnectType.InternetIdentity
+              ? await InternetIdentity.getIdentity()
+              : await Stoic.getIdentity(),
+        }),
+        canisterId: canisterId_xrp,
+      });
+
+    default:
+      return Actor.createActor(xrpIdlFactory, {
+        agent: new HttpAgent({ host: 'https://ic0.app' }),
+        canisterId: canisterId_xrp,
+      });
+  }
 };
 
-const createBrageActor = (
-  identity?: SignIdentity
-): import('@dfinity/agent').ActorSubclass<
-  import('./declarations/bridge/bridge.did')._SERVICE
+const createBrageActor = async (
+  connectType?: ConnectType
+): Promise<
+  import('@dfinity/agent').ActorSubclass<
+    import('./declarations/bridge/bridge.did')._SERVICE
+  >
 > => {
-  return Actor.createActor(brageIdlFactory, {
-    agent: new HttpAgent({
-      host: 'https://ic0.app',
-      identity,
-    }),
-    canisterId: canisterId_bridge,
-  });
+  switch (connectType) {
+    case ConnectType.Plug:
+      return Plug.getActor(canisterId_bridge, brageIdlFactory);
+    case ConnectType.InternetIdentity:
+    case ConnectType.Stoic:
+      return Actor.createActor(brageIdlFactory, {
+        agent: new HttpAgent({
+          host: 'https://ic0.app',
+          identity:
+            connectType === ConnectType.InternetIdentity
+              ? await InternetIdentity.getIdentity()
+              : await Stoic.getIdentity(),
+        }),
+        canisterId: canisterId_bridge,
+      });
+    default:
+      return Actor.createActor(brageIdlFactory, {
+        agent: new HttpAgent({ host: 'https://ic0.app' }),
+        canisterId: canisterId_bridge,
+      });
+  }
 };
 
-const createNFTActor = (
-  identity?: SignIdentity
-): import('@dfinity/agent').ActorSubclass<
-  import('./declarations/nft/nft.did')._SERVICE
+const createNFTActor = async (
+  connectType?: ConnectType
+): Promise<
+  import('@dfinity/agent').ActorSubclass<
+    import('./declarations/nft/nft.did')._SERVICE
+  >
 > => {
-  return Actor.createActor(nftIdlFactory, {
-    agent: new HttpAgent({
-      host: 'https://ic0.app',
-      identity,
-    }),
-    canisterId: canisterId_nft,
-  });
+  switch (connectType) {
+    case ConnectType.Plug:
+      return Plug.getActor(canisterId_nft, nftIdlFactory);
+    case ConnectType.InternetIdentity:
+    case ConnectType.Stoic:
+      return Actor.createActor(nftIdlFactory, {
+        agent: new HttpAgent({
+          host: 'https://ic0.app',
+          identity:
+            connectType === ConnectType.InternetIdentity
+              ? await InternetIdentity.getIdentity()
+              : await Stoic.getIdentity(),
+        }),
+        canisterId: canisterId_nft,
+      });
+    default:
+      return Actor.createActor(nftIdlFactory, {
+        agent: new HttpAgent({ host: 'https://ic0.app' }),
+        canisterId: canisterId_nft,
+      });
+  }
 };
 
 export const generateXRPAccount = () => {
@@ -85,20 +138,17 @@ export const crossXRP2IC = (token: CrossToken2IC) => {
     .then((res) => res.data);
 };
 
-export const isRegisterUser = async (
-  identity: SignIdentity,
-  principal: string
-) => {
-  const xrpActor = createXRPActor(identity);
+export const isRegisterUser = async (principal: string) => {
+  const xrpActor = await createXRPActor();
   return xrpActor.isRegisteredUser(Principal.fromText(principal));
 };
 
 export const setXRPAccount = async (
-  identity: SignIdentity,
   publicKey: string,
-  privateKey: string
+  privateKey: string,
+  connectType: ConnectType
 ) => {
-  const xrpActor = createXRPActor(identity);
+  const xrpActor = await createXRPActor(connectType);
   const res = await xrpActor.setXRPAccount(publicKey, privateKey);
   if ('ok' in res) {
     return Promise.resolve(res.ok);
@@ -107,8 +157,8 @@ export const setXRPAccount = async (
   }
 };
 
-export const getXRPAccount = async (identity: SignIdentity) => {
-  const xrpActor = createXRPActor(identity);
+export const getXRPAccount = async (connectType: ConnectType) => {
+  const xrpActor = await createXRPActor(connectType);
   const res = await xrpActor.getXRPAccount();
   if ('ok' in res) {
     return Promise.resolve(res.ok);
@@ -117,8 +167,8 @@ export const getXRPAccount = async (identity: SignIdentity) => {
   }
 };
 
-export const getAllTokens = async (identity?: SignIdentity) => {
-  const brageActor = createBrageActor(identity);
+export const getAllTokens = async () => {
+  const brageActor = await createBrageActor();
   const res = await brageActor.getAllTokenInfo();
   if ('ok' in res) {
     return Promise.resolve(res.ok);
@@ -127,13 +177,13 @@ export const getAllTokens = async (identity?: SignIdentity) => {
   }
 };
 
-export const getAccountIdentifier = (principal: string) => {
-  const brageActor = createBrageActor();
+export const getAccountIdentifier = async (principal: string) => {
+  const brageActor = await createBrageActor();
   return brageActor.getAccountIdentifier(Principal.fromText(principal));
 };
 
-export const getRegistry = () => {
-  const nftActor = createNFTActor();
+export const getRegistry = async () => {
+  const nftActor = await createNFTActor();
   return nftActor.getRegistry();
 };
 
@@ -169,7 +219,7 @@ export const getXRPNFTokens = async (publicKey: string, privateKey: string) => {
 export const transferNFT = (
   principal: string,
   identifier: string,
-  identity: SignIdentity
+  connectType: ConnectType
 ) => {
   const data = {
     from: { principal: Principal.fromText(principal) },
@@ -181,13 +231,13 @@ export const transferNFT = (
     subaccount: [],
   };
 
-  const nftActor = createNFTActor(identity);
+  const nftActor = createNFTActor(connectType);
   // @ts-ignore
   return nftActor.transfer(data);
 };
 
 export const getTokenIdentifier = async (id: string | number) => {
-  const brageActor = createBrageActor();
+  const brageActor = await createBrageActor();
   let index;
 
   if (typeof id === 'string') {

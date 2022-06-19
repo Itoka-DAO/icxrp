@@ -26,30 +26,31 @@ export const useConnect = () => {
   } = useContext(MainContext);
 
   const connect = async (type: ConnectType) => {
-    let identity: SignIdentity;
+    let identity: SignIdentity | undefined;
     let connectType: ConnectType;
+    let principal: string;
 
     if (type === ConnectType.InternetIdentity) {
       connectType = ConnectType.InternetIdentity;
       identity = await connectII();
+      principal = identity.getPrincipal().toString();
     } else if (type === ConnectType.Stoic) {
       connectType = ConnectType.Stoic;
       identity = await connectStoic();
+      principal = identity.getPrincipal().toString();
     } else if (type === ConnectType.Plug) {
       connectType = ConnectType.Plug;
-      identity = await connectPlug();
+      await connectPlug();
+      principal =
+        window.ic.plug.principalId ||
+        (await window.ic.plug.getPrincipal()).toString();
     } else {
       throw new Error('Error');
     }
 
-    const tokens = await getXRPKeys(identity);
-    setConnectData({
-      type: connectType,
-      identity,
-      principal: await identity.getPrincipal().toString(),
-      xrp: tokens,
-    });
     setConnect(true);
+    const tokens = await getXRPKeys(connectType, principal);
+    setConnectData({ type: connectType, identity, principal, xrp: tokens });
     setConnectPanelVisible(false);
   };
 

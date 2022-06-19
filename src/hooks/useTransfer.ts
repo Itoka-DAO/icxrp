@@ -56,7 +56,7 @@ export const useTransfer = () => {
       const transferRes = await transferNFT(
         connectData.principal,
         identifier,
-        connectData.identity
+        connectData.type
       );
 
       if ('err' in transferRes) {
@@ -78,37 +78,6 @@ export const useTransfer = () => {
     }
     setStep(Step.Completed);
     setSubmitLoading(false);
-
-    // Promise.all(
-    //   selectedTransferNFT.map(async (item) => {
-    //     const identifier = await getTokenIdentifier(item.tokenId);
-    //     const transferRes = await transferNFT(
-    //       connectData.principal,
-    //       identifier,
-    //       connectData.identity
-    //     );
-
-    //     if ('err' in transferRes) {
-    //       console.log(transferRes);
-    //     }
-
-    //     if (item.chain === 'ICP') {
-    //       crossIC2XRP({ ...CrossPayload, TokenIndex: Number(item.tokenId) });
-    //     }
-    //     if (item.chain === 'XRP') {
-    //       crossXRP2IC({ ...CrossPayload, NFTokenID: item.tokenId.toString() });
-    //     }
-    //   })
-    // )
-    //   .then((res) => {
-    //     setStep(Step.Completed);
-    //   })
-    //   .catch(() => {
-    //     console.log('error');
-    //   })
-    //   .finally(() => {
-    //     setSubmitLoading(false);
-    //   });
   };
 
   const completeToReturn = () => {
