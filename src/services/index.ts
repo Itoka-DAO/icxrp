@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Actor, HttpAgent, SignIdentity } from '@dfinity/agent';
+import { Actor, HttpAgent } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
 import { CrossToken2IC, CrossToken2XRP } from '../types/token';
 import { idlFactory as xrpIdlFactory } from './declarations/xrp';
