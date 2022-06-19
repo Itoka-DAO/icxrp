@@ -100,6 +100,15 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
   }, [getAllUserToken, userTokenInit])
 
   useEffect(() => {
+
+    // getConnectType().then(res => {
+    //   if (res) {
+
+    //   }
+
+    //   setLogining(false)
+    // })
+
     getConnectData().then(res => {
       setConnectData(res)
       setConnect(true)

@@ -81,6 +81,7 @@ export const useWallet = () => {
   };
 
   return {
+    getConnectType,
     getXRPKeys,
     getConnectData,
     connectII: InternetIdentity.connect,
