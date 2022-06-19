@@ -24,13 +24,14 @@ export const useWallet = () => {
       connectType = ConnectType.Stoic;
       identity = await Stoic.getIdentity();
     } else {
-      throw new Error('Error');
+      return Promise.reject();
     }
 
     const tokens = await getXRPKeys(identity);
 
     return {
       type: connectType,
+      identity,
       principal: await identity.getPrincipal().toString(),
       xrp: tokens,
     };

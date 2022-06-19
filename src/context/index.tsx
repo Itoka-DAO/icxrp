@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useWallet } from '../hooks';
-import { getUserICTokenIndexs } from '../services';
+import { getUserICTokenIndexs, getXRPNFTokens } from '../services';
 import { ConnectData } from '../types/connect';
 import { NFTokenFormated } from '../types/token';
 
@@ -64,29 +64,37 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
 
   const [userToken, setUserToken] = useState<NFTokenFormated[]>([])
 
+  const [userTokenInit, setUserTokenInit] = useState(false)
+
   const getAllUserToken = useCallback(async () => {
     if (!isConnect || !connectData || !connectData.xrp || allToken.length === 0) return [];
+    setUserTokenInit(true);
     console.log("Get user IC Tokens")
     const userICTokenIndexs = await getUserICTokenIndexs(connectData.principal);
-    const allICTokens = allToken.filter((item) =>
-      userICTokenIndexs.includes(item.id as number)
-    );
+
     console.log("Get user XRP Tokens")
-    // const allXRPTokens = getXRPNFTokens(
-    //   connectData.xrp.publicKey,
-    //   connectData.xrp.privateKey
-    // );
-    return [...allICTokens]
+    const userXRPTokens = await getXRPNFTokens(connectData.xrp.publicKey, connectData.xrp.privateKey);
+
+    const userTokens = [...userICTokenIndexs, ...userXRPTokens]
+
+    const allUserTokens = allToken.filter(token => {
+      return userTokens.includes(token.tokenId)
+    })
+
+    console.log("allXRP Tokens", allUserTokens)
+    return allUserTokens
   }, [allToken, connectData, isConnect])
 
   useEffect(() => {
+    if (userTokenInit) return;
     console.log("getToken")
     getAllUserToken().then(res => {
       setUserToken(res)
     })
-  }, [getAllUserToken])
+  }, [getAllUserToken, userTokenInit])
 
   useEffect(() => {
+    // if (!isConnect) return
     getConnectData().then(res => {
       setConnectData(res)
       setConnect(true)

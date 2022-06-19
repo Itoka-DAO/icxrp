@@ -1,6 +1,11 @@
 import { useContext, useState, useMemo } from 'react';
 import { MainContext, Step } from '../context';
-import { crossIC2XRP, crossXRP2IC } from '../services';
+import {
+  crossIC2XRP,
+  crossXRP2IC,
+  getTokenIdentifier,
+  transferNFT,
+} from '../services';
 import { NFTokenFormated } from '../types/token';
 import { useConnect } from './useConnect';
 import { useToken } from './useToken';
@@ -37,28 +42,73 @@ export const useTransfer = () => {
 
   const submitTransfer = async () => {
     if (!isConnect || !connectData?.xrp) return;
+
     setSubmitLoading(true);
+
     const CrossPayload = {
       xrpPublicKey: connectData.xrp.publicKey,
       xrpPrivateKey: connectData.xrp.privateKey,
       principal: connectData.principal,
     };
-    selectedTransferNFT.map((item) => {
+
+    for await (const item of selectedTransferNFT) {
+      const identifier = await getTokenIdentifier(item.tokenId);
+      const transferRes = await transferNFT(
+        connectData.principal,
+        identifier,
+        connectData.identity
+      );
+
+      if ('err' in transferRes) {
+        console.log(transferRes);
+      }
+
       if (item.chain === 'ICP') {
-        crossIC2XRP({ ...CrossPayload, TokenIndex: Number(item.id) });
+        await crossIC2XRP({
+          ...CrossPayload,
+          TokenIndex: Number(item.tokenId),
+        });
       }
       if (item.chain === 'XRP') {
-        crossXRP2IC({ ...CrossPayload, NFTokenID: item.id.toString() });
+        await crossXRP2IC({
+          ...CrossPayload,
+          NFTokenID: item.tokenId.toString(),
+        });
       }
-      return item;
-    });
+    }
+    setStep(Step.Completed);
+    setSubmitLoading(false);
 
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setSubmitLoading(false);
-        setStep(Step.Completed);
-      }, 5000);
-    });
+    // Promise.all(
+    //   selectedTransferNFT.map(async (item) => {
+    //     const identifier = await getTokenIdentifier(item.id);
+    //     const transferRes = await transferNFT(
+    //       connectData.principal,
+    //       identifier,
+    //       connectData.identity
+    //     );
+
+    //     if ('err' in transferRes) {
+    //       console.log(transferRes);
+    //     }
+
+    //     if (item.chain === 'ICP') {
+    //       crossIC2XRP({ ...CrossPayload, TokenIndex: Number(item.id) });
+    //     }
+    //     if (item.chain === 'XRP') {
+    //       crossXRP2IC({ ...CrossPayload, NFTokenID: item.id.toString() });
+    //     }
+    //   })
+    // )
+    //   .then((res) => {
+    //     setStep(Step.Completed);
+    //   })
+    //   .catch(() => {
+    //     console.log('error');
+    //   })
+    //   .finally(() => {
+    //     setSubmitLoading(false);
+    //   });
   };
 
   const completeToReturn = () => {

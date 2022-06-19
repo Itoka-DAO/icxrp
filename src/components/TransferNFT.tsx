@@ -17,13 +17,13 @@ const TransferNFT = () => {
       <HStack spacing="14" justifyContent="space-between" mb="6" mt="12">
         <Box flex="1">
           <Card title="Your Assets">
-            {canSelectNFTs.map(item => <ReadyToAddTransferItem key={item.id} onAddToTransfer={() => selectNFT(item)} nftData={item} />)}
+            {canSelectNFTs.map(item => <ReadyToAddTransferItem key={item.tokenId} onAddToTransfer={() => selectNFT(item)} nftData={item} />)}
           </Card>
         </Box>
 
         <Box flex="1">
           <Card title="Transfer List">
-            {selectedTransferNFT.map(item => <ReadyForTransferItem key={item.id} onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
+            {selectedTransferNFT.map(item => <ReadyForTransferItem key={item.tokenId} onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
           </Card>
         </Box>
 

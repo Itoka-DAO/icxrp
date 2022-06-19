@@ -1,3 +1,5 @@
+import { SignIdentity } from '@dfinity/agent';
+
 export enum ConnectType {
   Stoic = 'stoic',
   InternetIdentity = 'internetIdentity',
@@ -7,6 +9,7 @@ export enum ConnectType {
 export interface ConnectData {
   type: ConnectType;
   principal: string;
+  identity: SignIdentity;
   xrp?: {
     publicKey: string;
     privateKey: string;

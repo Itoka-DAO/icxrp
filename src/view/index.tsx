@@ -52,7 +52,7 @@ const Main = () => {
         <Container maxW="1200">
           <Card title="All NFT Listing">
             <SimpleGrid columns={2} spacingX="14">
-              {allToken.map(item => <TransferItem key={item.id} nftData={item} />)}
+              {allToken.map(item => <TransferItem key={item.tokenId} nftData={item} />)}
             </SimpleGrid>
           </Card>
         </Container>

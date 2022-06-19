@@ -17,7 +17,7 @@ const VerifyTransfer = () => {
       <Center>
         {!submitLoading && <Box maxW="670" mb="6" mt="12" flex="1">
           <Card title="Transfer List">
-            {selectedTransferNFT.map(item => <ReadyForTransferItem key={item.id} onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
+            {selectedTransferNFT.map(item => <ReadyForTransferItem key={item.tokenId} onRemoveFromTransfer={() => unSelectNFT(item)} nftData={item} />)}
           </Card>
         </Box>}
 

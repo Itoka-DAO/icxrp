@@ -7,10 +7,11 @@ export interface NFTToken {
 }
 
 export interface NFTokenFormated {
-  id: string | number;
+  tokenIndex: number;
   chain: 'XRP' | 'ICP';
   metadata: string;
   tokenIdentifier: string;
+  tokenId: string | number;
 }
 
 export interface CrossToken {

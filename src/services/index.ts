@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { Actor, HttpAgent, SignIdentity } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
-// import xrpl from 'xrpl';
 import { CrossToken2IC, CrossToken2XRP } from '../types/token';
 import { idlFactory as xrpIdlFactory } from './declarations/xrp';
 import { idlFactory as brageIdlFactory } from './declarations/bridge';
@@ -72,13 +71,17 @@ export const generateXRPAccount = () => {
 
 export const crossIC2XRP = (token: CrossToken2XRP) => {
   return axios
-    .post('https://xrp-backend-nine.vercel.app/api/ic2xrp', token)
+    .post('https://xrp-backend-nine.vercel.app/api/ic2xrp', token, {
+      timeout: 999999999,
+    })
     .then((res) => res.data);
 };
 
 export const crossXRP2IC = (token: CrossToken2IC) => {
   return axios
-    .post('https://xrp-backend-nine.vercel.app/api/xrp2ic', token)
+    .post('https://xrp-backend-nine.vercel.app/api/xrp2ic', token, {
+      timeout: 99999999,
+    })
     .then((res) => res.data);
 };
 
@@ -145,18 +148,64 @@ export const getUserICTokenIndexs = async (principal: string) => {
 };
 
 export const getXRPNFTokens = async (publicKey: string, privateKey: string) => {
-  // const xrpNFTServer = 'wss://xls20-sandbox.rippletest.net:51233';
-  // const client = new xrpl.Client(xrpNFTServer);
-  // const clientWallet = xrpl.Wallet.fromSeed(privateKey);
-  // await client.connect();
-  // const nfts = await client.request({
-  //   account: clientWallet.classicAddress,
-  //   command: 'account_nfts',
-  // });
-  // // client.disconnect();
-  // // @ts-ignore
-  // const NFTokenIds = nfts.result.account_nfts.map((item: any) => {
-  //   return item.NFTokenID;
-  // });
-  // return NFTokenIds;
+  const xrpNFTServer = 'wss://xls20-sandbox.rippletest.net:51233';
+  //@ts-ignore
+  const client = new xrpl.Client(xrpNFTServer);
+  //@ts-ignore
+  const clientWallet = xrpl.Wallet.fromSeed(privateKey);
+  await client.connect();
+  const nfts = await client.request({
+    account: clientWallet.classicAddress,
+    command: 'account_nfts',
+  });
+  // client.disconnect();
+  // @ts-ignore
+  const NFTokenIds = nfts.result.account_nfts.map((item: any) => {
+    return item.NFTokenID;
+  });
+  return NFTokenIds;
+};
+
+export const transferNFT = (
+  principal: string,
+  identifier: string,
+  identity: SignIdentity
+) => {
+  const data = {
+    from: { principal: Principal.fromText(principal) },
+    to: { principal: Principal.fromText(canisterId_bridge) },
+    token: identifier,
+    amount: 1,
+    memo: [0],
+    notify: false,
+    subaccount: [],
+  };
+
+  const nftActor = createNFTActor(identity);
+  // @ts-ignore
+  return nftActor.transfer(data);
+};
+
+export const getTokenIdentifier = async (id: string | number) => {
+  const brageActor = createBrageActor();
+  let index;
+
+  if (typeof id === 'string') {
+    const result = await brageActor.getTokenId_ic(id);
+    if ('ok' in result) {
+      index = result.ok;
+    } else {
+      throw new Error('no token index');
+    }
+  } else {
+    index = id;
+  }
+
+  const res = await brageActor.getTokenIdentifier(index);
+
+  if ('ok' in res) {
+    return Promise.resolve(res.ok);
+  } else {
+    return Promise.reject(res.err);
+  }
 };

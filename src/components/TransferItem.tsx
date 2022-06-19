@@ -1,11 +1,9 @@
-import { HStack, Icon, Tag, Text, VStack, Flex, Tooltip } from "@chakra-ui/react";
+import { HStack, Icon, Tag, Text, VStack, Flex, Tooltip, Image } from "@chakra-ui/react";
 import { FiCheckCircle, FiPlusSquare, FiXCircle, FiArrowRight } from 'react-icons/fi'
 import { NFTokenFormated } from "../types/token";
 import { ellipsis } from "../utils";
 
 interface BlockChainTagProps {
-  // isOnIC: boolean;
-  // blockChain: "XRP" | "ICP";
   chain: "XRP" | "ICP"
   type?: "added" | "success"
 }
@@ -27,9 +25,9 @@ export const BlockChainTag = ({ chain, type }: BlockChainTagProps) => {
     case "success":
       return (
         <HStack spacing="1">
-          <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={other.toLowerCase()}>{other}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={other.toLowerCase()}>{primary}</Tag>
           <Icon color="gray.500" fontSize="2xl" as={FiArrowRight} />
-          <Tag w="44px" textAlign="center" fontWeight={700} bgColor={primary.toLowerCase()} color="white">{primary}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} bgColor={primary.toLowerCase()} color="white">{other}</Tag>
         </HStack>
       )
     default:
@@ -50,8 +48,8 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData }: 
   return (
     <Flex align="center" justifyContent="space-between" color="white" fontSize="sm" h="78px" borderBottom="1px solid white" px="4">
       <HStack>
-        <Text>{nftData.id}</Text>
-        {/* <Image src={nftData?.thumb} /> */}
+        <Text>{nftData.tokenIndex}</Text>
+        <Image src={nftData?.metadata} w="60px" />
         <Tooltip closeOnMouseDown={false} label={nftData.tokenIdentifier}>
           {ellipsis(nftData?.tokenIdentifier)}
         </Tooltip>

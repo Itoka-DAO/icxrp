@@ -4,10 +4,11 @@ import { NFTokenFormated } from './types/token';
 export const formatToken = (token: TokenInfo): NFTokenFormated => {
   const serliezdToken = serliezd(token);
   return {
-    id: token.isOnIC ? token.tokenIndex : token.nftokenID,
+    tokenIndex: token.tokenIndex,
     chain: token.isOnIC ? 'ICP' : 'XRP',
     metadata: serliezdToken.metadata,
     tokenIdentifier: token.tokenIdentifier,
+    tokenId: token.isOnIC ? token.tokenIndex : token.nftokenID,
   };
 };
 

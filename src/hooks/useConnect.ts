@@ -37,6 +37,7 @@ export const useConnect = () => {
     const tokens = await getXRPKeys(identity);
     setConnectData({
       type: connectType,
+      identity,
       principal: await identity.getPrincipal().toString(),
       xrp: tokens,
     });
