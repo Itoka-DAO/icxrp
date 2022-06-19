@@ -21,13 +21,11 @@ const Main = () => {
 
   const [connectPanelVisible, setConnectPanelVisible] = useState(false)
 
-  const { isConnect, openConnectPanel } = useConnect()
+  const { isConnect, openConnectPanel, isLogining } = useConnect()
 
   const { step } = useTransfer()
 
   const { allToken } = useToken()
-
-
 
   return (
     <Box bg={bodyBG} minHeight="100vh">
@@ -39,7 +37,7 @@ const Main = () => {
         <Heading color="white" fontSize="6xl" lineHeight="tall">Internet Computer - Ripple Cross-chain Solution<small>(beta)</small></Heading>
         <Heading color="white" fontSize="3xl" as="h3" lineHeight="tall">An Infrastrucutre for Multi-chain Entertainment</Heading>
         {/* <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" onClick={() => setConnectPanelVisible(true)}>Start Transfer</Button> */}
-        <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" onClick={openConnectPanel}>Start Transfer</Button>
+        <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" isLoading={isLogining} onClick={openConnectPanel}>Start Transfer</Button>
 
         {/* <Box color="white">
           <Text>See All NFT Listing</Text>

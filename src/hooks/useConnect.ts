@@ -22,6 +22,7 @@ export const useConnect = () => {
     setConnectPanelVisible,
     connectData,
     setConnectData,
+    logining,
   } = useContext(MainContext);
 
   const connect = async (type: ConnectType) => {
@@ -37,7 +38,6 @@ export const useConnect = () => {
     } else if (type === ConnectType.Plug) {
       connectType = ConnectType.Plug;
       identity = await connectPlug();
-      // console.log(identity);
     } else {
       throw new Error('Error');
     }
@@ -86,5 +86,6 @@ export const useConnect = () => {
     connectData,
     openConnectPanel,
     closeConnectPanel,
+    isLogining: logining,
   };
 };

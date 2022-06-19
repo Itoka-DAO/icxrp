@@ -26,6 +26,8 @@ interface MainContextType {
   allToken: NFTokenFormated[];
   setAllToken: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
   userToken: NFTokenFormated[];
+  logining: boolean;
+  setLogining: React.Dispatch<React.SetStateAction<boolean>>;
   // setUserToken: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
 }
 
@@ -43,6 +45,8 @@ const defaultValue = {
   allToken: [],
   setAllToken: () => { },
   userToken: [],
+  logining: false,
+  setLogining: () => { }
   // setUserToken: () => { }
 };
 
@@ -65,6 +69,8 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
   const [userToken, setUserToken] = useState<NFTokenFormated[]>([])
 
   const [userTokenInit, setUserTokenInit] = useState(false)
+
+  const [logining, setLogining] = useState(true)
 
   const getAllUserToken = useCallback(async () => {
     if (!isConnect || !connectData || !connectData.xrp || allToken.length === 0) return [];
@@ -97,6 +103,10 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
     getConnectData().then(res => {
       setConnectData(res)
       setConnect(true)
+    }).catch(() => {
+      console.log("No connect data")
+    }).finally(() => {
+      setLogining(false)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -108,7 +118,8 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
       connectPanelVisible, setConnectPanelVisible,
       step, setStep,
       selectedTransferNFT, setSelectedTransferNFT,
-      allToken, setAllToken, userToken
+      allToken, setAllToken, userToken,
+      logining, setLogining
     }}>
       {children}
     </MainContext.Provider>
