@@ -94,7 +94,6 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
   }, [getAllUserToken, userTokenInit])
 
   useEffect(() => {
-    // if (!isConnect) return
     getConnectData().then(res => {
       setConnectData(res)
       setConnect(true)

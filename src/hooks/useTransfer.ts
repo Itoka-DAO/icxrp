@@ -15,7 +15,7 @@ export const useTransfer = () => {
     useContext(MainContext);
 
   const { isConnect, connectData } = useConnect();
-  const { userToken } = useToken();
+  const { userToken, initToken } = useToken();
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const canSelectNFTs = useMemo(() => {
@@ -81,7 +81,7 @@ export const useTransfer = () => {
 
     // Promise.all(
     //   selectedTransferNFT.map(async (item) => {
-    //     const identifier = await getTokenIdentifier(item.id);
+    //     const identifier = await getTokenIdentifier(item.tokenId);
     //     const transferRes = await transferNFT(
     //       connectData.principal,
     //       identifier,
@@ -93,10 +93,10 @@ export const useTransfer = () => {
     //     }
 
     //     if (item.chain === 'ICP') {
-    //       crossIC2XRP({ ...CrossPayload, TokenIndex: Number(item.id) });
+    //       crossIC2XRP({ ...CrossPayload, TokenIndex: Number(item.tokenId) });
     //     }
     //     if (item.chain === 'XRP') {
-    //       crossXRP2IC({ ...CrossPayload, NFTokenID: item.id.toString() });
+    //       crossXRP2IC({ ...CrossPayload, NFTokenID: item.tokenId.toString() });
     //     }
     //   })
     // )
@@ -112,6 +112,7 @@ export const useTransfer = () => {
   };
 
   const completeToReturn = () => {
+    initToken();
     setSelectedTransferNFT([]);
     backToTransfer();
   };

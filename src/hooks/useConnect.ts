@@ -5,8 +5,15 @@ import { ConnectType } from '../types/connect';
 import { useWallet } from './';
 
 export const useConnect = () => {
-  const { connectStoic, connectII, disconnectII, disconnectStoic, getXRPKeys } =
-    useWallet();
+  const {
+    connectStoic,
+    connectII,
+    disconnectII,
+    disconnectStoic,
+    connectPlug,
+    disconnectPlug,
+    getXRPKeys,
+  } = useWallet();
 
   const {
     isConnect,
@@ -29,7 +36,8 @@ export const useConnect = () => {
       identity = await connectStoic();
     } else if (type === ConnectType.Plug) {
       connectType = ConnectType.Plug;
-      identity = await connectII();
+      identity = await connectPlug();
+      // console.log(identity);
     } else {
       throw new Error('Error');
     }
@@ -52,6 +60,10 @@ export const useConnect = () => {
 
     if (connectData?.type === ConnectType.Stoic) {
       await disconnectStoic();
+    }
+
+    if (connectData?.type === ConnectType.Plug) {
+      await disconnectPlug();
     }
 
     setConnect(false);

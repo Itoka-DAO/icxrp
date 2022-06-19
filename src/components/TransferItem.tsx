@@ -25,9 +25,9 @@ export const BlockChainTag = ({ chain, type }: BlockChainTagProps) => {
     case "success":
       return (
         <HStack spacing="1">
-          <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={other.toLowerCase()}>{primary}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={primary.toLowerCase()}>{primary}</Tag>
           <Icon color="gray.500" fontSize="2xl" as={FiArrowRight} />
-          <Tag w="44px" textAlign="center" fontWeight={700} bgColor={primary.toLowerCase()} color="white">{other}</Tag>
+          <Tag w="44px" textAlign="center" fontWeight={700} bgColor={other.toLowerCase()} color="white">{other}</Tag>
         </HStack>
       )
     default:

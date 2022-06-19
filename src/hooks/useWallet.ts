@@ -8,6 +8,7 @@ import InternetIdentity from '../services/InternetIdentity';
 import Stoic from '../services/stoic';
 import { SignIdentity } from '@dfinity/agent';
 import { ConnectType } from '../types/connect';
+import Plug from '../services/plug';
 
 export const useWallet = () => {
   const getConnectData = async () => {
@@ -17,7 +18,7 @@ export const useWallet = () => {
     if (await InternetIdentity.isAuthenticated()) {
       connectType = ConnectType.InternetIdentity;
       identity = await InternetIdentity.getIdentity();
-    } else if (false) {
+    } else if (await Plug.isAuthenticated()) {
       connectType = ConnectType.Plug;
       identity = await InternetIdentity.getIdentity();
     } else if (await Stoic.isAuthenticated()) {
@@ -67,5 +68,7 @@ export const useWallet = () => {
     connectStoic: Stoic.connect,
     disconnectII: InternetIdentity.disconnect,
     disconnectStoic: Stoic.disconnect,
+    connectPlug: Plug.connect,
+    disconnectPlug: Plug.disconnect,
   };
 };

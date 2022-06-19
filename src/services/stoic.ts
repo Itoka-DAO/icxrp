@@ -2,20 +2,18 @@ import { StoicIdentity } from 'ic-stoic-identity';
 import { SignIdentity } from '@dfinity/agent';
 
 export const connect = async (): Promise<SignIdentity> => {
-  return new Promise(async (resolve) => {
-    StoicIdentity.load().then((identity: SignIdentity | false) => {
-      if (identity !== false) {
-        resolve(identity);
-      } else {
-        return StoicIdentity.connect();
-      }
-    });
+  return StoicIdentity.load().then((identity: SignIdentity | false) => {
+    if (identity !== false) {
+      return Promise.resolve(identity);
+    } else {
+      return StoicIdentity.connect();
+    }
   });
 };
 
 export const getIdentity = async (): Promise<SignIdentity> => {
   return new Promise(async (resolve) => {
-    StoicIdentity.load().then((identity: SignIdentity | false) => {
+    return StoicIdentity.load().then((identity: SignIdentity | false) => {
       if (identity !== false) {
         resolve(identity);
       } else {
