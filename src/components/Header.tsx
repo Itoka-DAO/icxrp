@@ -13,7 +13,7 @@ const Header = () => {
 
         <HStack fontSize="32px">
           <Text color="second" fontSize="5xl" fontFamily="Himagsikan">ITOKA</Text>
-          <Text color="white">IC-XRP Bridge</Text>
+          <Text color="white">IC-XRP</Text>
         </HStack>
 
         {isConnect && connectData && <HStack align="stretch">
