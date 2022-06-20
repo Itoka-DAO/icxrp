@@ -3,7 +3,7 @@ import { useTransfer } from '../hooks';
 import Card from './Card';
 import { ReadyForTransferItem } from './TransferItem';
 import { Step, Steps } from "chakra-ui-steps"
-import { transferSteps } from '../hooks/useTransfer';
+import { transfer2ICSteps, transfer2XRPSteps } from '../hooks/useTransfer';
 
 const VerifyTransfer = () => {
 
@@ -26,9 +26,10 @@ const VerifyTransfer = () => {
 
         {submitLoading && <Box py="40" w="600px">
           <Steps colorScheme="whiteAlpha" activeStep={transferStep}>
-            {transferSteps.map(({ label }, index) => (
-              <Step icon={transferStep === index ? Spinner : undefined} label={<Box color="white">{label}</Box>} key={label} />
-            ))}
+            {(selectedTransferNFT[0]?.chain === "XRP" ? transfer2ICSteps : transfer2XRPSteps).map(({ label }, index) => {
+              let icon: any = transferStep === index ? Spinner : undefined
+              return <Step icon={icon} label={<Box color="white">{label}</Box>} key={label} />
+            })}
           </Steps>
         </Box>}
       </Center>

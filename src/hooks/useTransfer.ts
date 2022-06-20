@@ -11,9 +11,14 @@ import { useConnect } from './useConnect';
 import { useToken } from './useToken';
 import { useSteps } from 'chakra-ui-steps';
 
-export const transferSteps = [
-  { label: 'request stacking' },
+export const transfer2ICSteps = [
+  { label: 'Skip' },
   { label: 'request burning to XRPL' },
+];
+
+export const transfer2XRPSteps = [
+  { label: 'request stacking' },
+  { label: 'request minting to XRPL' },
 ];
 
 export const useTransfer = () => {
@@ -75,17 +80,19 @@ export const useTransfer = () => {
     };
 
     for await (const item of selectedTransferNFT) {
-      const identifier = await getTokenIdentifier(item.tokenId);
-      const transferRes = await transferNFT(
-        connectData.principal,
-        identifier,
-        connectData.type
-      );
-      nextStep();
-
-      if ('err' in transferRes) {
-        console.log(transferRes);
+      if (item.chain === 'ICP') {
+        const identifier = await getTokenIdentifier(item.tokenId);
+        const transferRes = await transferNFT(
+          connectData.principal,
+          identifier,
+          connectData.type
+        );
+        if ('err' in transferRes) {
+          console.log(transferRes);
+        }
       }
+
+      nextStep();
 
       if (item.chain === 'ICP') {
         const res = await crossIC2XRP({
