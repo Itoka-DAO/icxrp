@@ -13,7 +13,7 @@ import { useSteps } from 'chakra-ui-steps';
 
 export const transferSteps = [
   { label: 'request stacking' },
-  { label: 'request minting to XRPL' },
+  { label: 'request burning to XRPL' },
 ];
 
 export const useTransfer = () => {
@@ -117,6 +117,7 @@ export const useTransfer = () => {
     initToken();
     setSelectedTransferNFT([]);
     backToTransfer();
+    setTransferXRPHash([]);
   };
 
   const backToTransfer = () => {
