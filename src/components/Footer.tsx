@@ -32,8 +32,8 @@ const Footer = () => {
             </Box>
           </HStack>
           <VStack w="186px">
-            <Link><Image src={dfinityLogo} /></Link>
-            <Link><Image src={xrpLogo} /></Link>
+            <Link href="https://dfinity.org/"><Image src={dfinityLogo} /></Link>
+            <Link href="https://ripple.com/xrp/"><Image src={xrpLogo} /></Link>
           </VStack>
         </Flex>
 
