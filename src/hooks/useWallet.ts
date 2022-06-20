@@ -35,8 +35,8 @@ export const useWallet = () => {
     } else if (await Plug.isAuthenticated()) {
       connectType = ConnectType.Plug;
       principal =
-        window.ic.plug.principalId ||
-        (await window.ic.plug.getPrincipal()).toString();
+        window?.ic?.plug.principalId ||
+        (await window?.ic?.plug.getPrincipal()).toString();
       console.log('Login via plug');
     } else if (await Stoic.isAuthenticated()) {
       connectType = ConnectType.Stoic;

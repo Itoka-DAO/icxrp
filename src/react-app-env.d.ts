@@ -3,6 +3,6 @@ import Plug from '@psychedelic/plug-inpage-provider';
 
 declare global {
   interface Window {
-    ic: { plug: Plug };
+    ic?: { plug?: Plug };
   }
 }

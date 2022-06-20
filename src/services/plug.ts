@@ -1,7 +1,7 @@
 import { Agent } from '@dfinity/agent';
 import { IDL } from '@dfinity/candid';
 
-const plug = window.ic.plug;
+const plug = window?.ic?.plug;
 
 const connect = async (): Promise<boolean> => {
   return new Promise(async (resolve) => {

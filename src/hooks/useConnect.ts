@@ -43,8 +43,8 @@ export const useConnect = () => {
       connectType = ConnectType.Plug;
       await connectPlug();
       principal =
-        window.ic.plug.principalId ||
-        (await window.ic.plug.getPrincipal()).toString();
+        window?.ic?.plug.principalId ||
+        (await window?.ic?.plug.getPrincipal()).toString();
     } else {
       throw new Error('Error');
     }
