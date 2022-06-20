@@ -28,11 +28,11 @@ export const BlockChainTag = ({ chain, type, xrpLink }: BlockChainTagProps) => {
       return (
         <HStack spacing="1">
           <Tag w="44px" textAlign="center" fontWeight={700} bgColor="transparent" color={primary.toLowerCase()}>
-            {primary === "XRP" ? <Link target="_blank" href={xrpLink}>{primary}</Link> : primary}
+            {primary === "XRP" ? <Link textDecoration="underline" target="_blank" href={xrpLink}>{primary}</Link> : primary}
           </Tag>
           <Icon color="gray.500" fontSize="2xl" as={FiArrowRight} />
           <Tag w="44px" textAlign="center" fontWeight={700} bgColor={other.toLowerCase()} color="white">
-            {other === "XRP" ? <Link target="_blank" href={xrpLink}>{other}</Link> : other}
+            {other === "XRP" ? <Link textDecoration="underline" target="_blank" href={xrpLink}>{other}</Link> : other}
           </Tag>
         </HStack>
       )
@@ -59,7 +59,7 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData, di
     <Flex align="center" justifyContent="space-between" color="white" fontSize="sm" h="78px" borderBottom="1px solid white" px="4">
       <HStack>
         <Text>{nftData.tokenIndex}</Text>
-        <Image onClick={() => setIsOpen(true)} src={nftData?.metadata} w="60px" />
+        <Image cursor="pointer" onClick={() => setIsOpen(true)} src={nftData?.metadata} w="60px" />
         <Tooltip closeOnMouseDown={false} label={nftData.tokenIdentifier}>
           {ellipsis(nftData?.tokenIdentifier)}
         </Tooltip>

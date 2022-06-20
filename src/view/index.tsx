@@ -52,7 +52,7 @@ const Main = () => {
         <Container maxW="1200">
           <Card title="All NFT Listing">
             <SimpleGrid columns={2} spacingX="14">
-              {allToken.map(item => <TransferItem key={item.tokenId} nftData={item} />)}
+              {allToken.map(item => <TransferItem xrpLink={item.chain === "XRP" ? `https://nft-devnet.xrpl.org/transactions/${item.tokenId}` : undefined} key={item.tokenId} nftData={item} />)}
             </SimpleGrid>
           </Card>
         </Container>
