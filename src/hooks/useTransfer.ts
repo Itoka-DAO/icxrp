@@ -13,12 +13,12 @@ import { useSteps } from 'chakra-ui-steps';
 
 export const transfer2ICSteps = [
   { label: 'Query XRP keys' },
-  { label: 'request burning to XRPL' },
+  { label: 'Request Burning to XRPL' },
 ];
 
 export const transfer2XRPSteps = [
-  { label: 'request stacking' },
-  { label: 'request minting to XRPL' },
+  { label: 'Request Stacking' },
+  { label: 'Request Minting to XRPL' },
 ];
 
 export const useTransfer = () => {
