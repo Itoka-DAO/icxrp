@@ -22,7 +22,7 @@ const Disclaimer = (props: DisclaimerProps) => {
             <Text mb="4">Investors must conduct their own research before trading. Itoka and OctAI Inc. do not accept any responsibility or liability for any loss of assets or investments.</Text>
           </Box>
           <Center py="10">
-            <Checkbox onChange={() => props.onClose()}>I have read, understood, and agree to the above</Checkbox>
+            <Checkbox colorScheme = "black" onChange={() => props.onClose()}>I have read, understood, and agree to the above</Checkbox>
           </Center>
         </ModalBody>
       </ModalContent>
