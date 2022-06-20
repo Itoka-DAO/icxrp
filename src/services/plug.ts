@@ -10,7 +10,7 @@ const connect = async (): Promise<boolean> => {
       if (res) {
         resolve(true);
       } else {
-        plug.requestConnect().then((res) => {
+        plug?.requestConnect().then((res) => {
           console.log(res, 'request connect plug');
           resolve(true);
         });
@@ -20,15 +20,15 @@ const connect = async (): Promise<boolean> => {
 };
 
 const isAuthenticated = async () => {
-  return plug.isConnected();
+  return plug?.isConnected();
 };
 
 const getAgent = async (): Promise<Agent> => {
   return new Promise(async (resolve) => {
-    if (!plug.agent) {
-      await plug.createAgent();
+    if (!plug?.agent) {
+      await plug?.createAgent();
     }
-    if (plug.agent) {
+    if (plug?.agent) {
       // @ts-ignore
       resolve(plug.agent);
     }
@@ -48,7 +48,7 @@ const getActor = async <T>(
 };
 
 const disconnect = async (): Promise<void> => {
-  plug.disconnect();
+  plug?.disconnect();
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
