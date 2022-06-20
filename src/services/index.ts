@@ -124,7 +124,7 @@ export const generateXRPAccount = () => {
 
 export const crossIC2XRP = (token: CrossToken2XRP) => {
   return axios
-    .post('https://xrp-backend-nine.vercel.app/api/ic2xrp', token, {
+    .post('https://xrp-server.itoka.xyz/api/ic2xrp', token, {
       timeout: 999999999,
     })
     .then((res) => res.data);
@@ -132,7 +132,7 @@ export const crossIC2XRP = (token: CrossToken2XRP) => {
 
 export const crossXRP2IC = (token: CrossToken2IC) => {
   return axios
-    .post('https://xrp-backend-nine.vercel.app/api/xrp2ic', token, {
+    .post('https://xrp-server.itoka.xyz/api/xrp2ic', token, {
       timeout: 99999999,
     })
     .then((res) => res.data);

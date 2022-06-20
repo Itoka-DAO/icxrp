@@ -20,6 +20,7 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "axios": "^0.27.2",
+    "chakra-ui-steps": "^1.7.3",
     "framer-motion": "^6.2.9",
     "ic-stoic-identity": "^2.0.0",
     "react": "^18.1.0",

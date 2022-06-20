@@ -9,17 +9,40 @@ import {
 import { NFTokenFormated } from '../types/token';
 import { useConnect } from './useConnect';
 import { useToken } from './useToken';
+import { useSteps } from 'chakra-ui-steps';
+
+export const transferSteps = [
+  { label: 'request stacking' },
+  { label: 'request minting to XRPL' },
+];
 
 export const useTransfer = () => {
-  const { step, setStep, selectedTransferNFT, setSelectedTransferNFT } =
-    useContext(MainContext);
+  const {
+    step,
+    setStep,
+    selectedTransferNFT,
+    setSelectedTransferNFT,
+    transferXRPHash,
+    setTransferXRPHash,
+  } = useContext(MainContext);
 
   const { isConnect, connectData } = useConnect();
   const { userToken, initToken } = useToken();
   const [submitLoading, setSubmitLoading] = useState(false);
 
+  const {
+    nextStep,
+    reset,
+    activeStep: transferStep,
+  } = useSteps({
+    initialStep: 0,
+  });
+
   const canSelectNFTs = useMemo(() => {
-    return userToken.filter((item) => !selectedTransferNFT.includes(item));
+    return userToken.filter(
+      (item) =>
+        !selectedTransferNFT.map((item) => item.tokenId).includes(item.tokenId)
+    );
   }, [selectedTransferNFT, userToken]);
 
   const discardChange = () => {
@@ -58,25 +81,35 @@ export const useTransfer = () => {
         identifier,
         connectData.type
       );
+      nextStep();
 
       if ('err' in transferRes) {
         console.log(transferRes);
       }
 
       if (item.chain === 'ICP') {
-        await crossIC2XRP({
+        const res = await crossIC2XRP({
           ...CrossPayload,
           TokenIndex: Number(item.tokenId),
         });
+        setTransferXRPHash([
+          ...transferXRPHash,
+          { indexToken: item.tokenIndex, hash: res?.res?.tx?.result?.hash },
+        ]);
       }
       if (item.chain === 'XRP') {
-        await crossXRP2IC({
+        const res = await crossXRP2IC({
           ...CrossPayload,
           NFTokenID: item.tokenId.toString(),
         });
+        setTransferXRPHash([
+          ...transferXRPHash,
+          { indexToken: item.tokenIndex, hash: res?.res?.tx?.result?.hash },
+        ]);
       }
     }
     setStep(Step.Completed);
+    reset();
     setSubmitLoading(false);
   };
 
@@ -102,5 +135,7 @@ export const useTransfer = () => {
     canSelectNFTs,
     submitLoading,
     completeToReturn,
+    transferStep,
+    transferXRPHash,
   };
 };

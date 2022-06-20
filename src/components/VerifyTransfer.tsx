@@ -1,17 +1,20 @@
-import { Box, Button, Center, Container, Heading, HStack, Spinner } from '@chakra-ui/react';
+import { Box, Button, Center, Container, Heading, HStack, Text, Spinner } from '@chakra-ui/react';
 import { useTransfer } from '../hooks';
 import Card from './Card';
 import { ReadyForTransferItem } from './TransferItem';
+import { Step, Steps } from "chakra-ui-steps"
+import { transferSteps } from '../hooks/useTransfer';
 
 const VerifyTransfer = () => {
 
-  const { submitTransfer, backToTransfer, selectedTransferNFT, unSelectNFT, submitLoading } = useTransfer()
-
+  const { submitTransfer, backToTransfer, selectedTransferNFT, unSelectNFT, submitLoading, transferStep } = useTransfer()
 
   return (
     <Container maxW="1200">
       <Box textAlign="center">
-        <Heading color="white" fontSize="6xl">Please Verify Your Transaction</Heading>
+        {!submitLoading && <Heading color="white" fontSize="6xl">Please Verify Your Transaction</Heading>}
+        {submitLoading && <Heading mb="4" color="white" fontSize="6xl">Processing Transaction</Heading>}
+        {submitLoading && <Text color="red" fontSize="2xl">Warning: do not fresh the page.</Text>}
       </Box>
 
       <Center>
@@ -21,14 +24,12 @@ const VerifyTransfer = () => {
           </Card>
         </Box>}
 
-        {submitLoading && <Box py="40">
-          <Spinner
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
-          />
+        {submitLoading && <Box py="40" w="600px">
+          <Steps colorScheme="whiteAlpha" activeStep={transferStep}>
+            {transferSteps.map(({ label }, index) => (
+              <Step icon={transferStep === index ? Spinner : undefined} label={<Box color="white">{label}</Box>} key={label} />
+            ))}
+          </Steps>
         </Box>}
       </Center>
 

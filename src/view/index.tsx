@@ -27,6 +27,8 @@ const Main = () => {
 
   const { allToken } = useToken()
 
+  const [disclaimerShow, setDisclaimerShow] = useState(true)
+
   return (
     <Box bg={bodyBG} minHeight="100vh">
       {/* header */}
@@ -58,7 +60,7 @@ const Main = () => {
       </Box>}
 
       {isConnect && <Box pb="14">
-        {step === Step.Transfer && <TransferNFT />}
+        {step === Step.Transfer && <TransferNFT disclaimerShow={disclaimerShow} onClose={() => setDisclaimerShow(false)} />}
         {step === Step.Verify && <VerifyTransfer />}
         {step === Step.Completed && < TransferSuccess />}
       </Box>}

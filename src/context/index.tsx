@@ -33,6 +33,8 @@ interface MainContextType {
   loadingUserToken: boolean;
   setLoadingUserToken: React.Dispatch<React.SetStateAction<boolean>>;
   setUserTokenInit: React.Dispatch<React.SetStateAction<boolean>>;
+  transferXRPHash: { indexToken: number, hash: string }[];
+  setTransferXRPHash: React.Dispatch<React.SetStateAction<{ indexToken: number, hash: string }[]>>;
   // setUserToken: React.Dispatch<React.SetStateAction<NFTokenFormated[]>>;
 }
 
@@ -56,7 +58,9 @@ const defaultValue = {
   setLoadingToken: () => { },
   loadingUserToken: false,
   setLoadingUserToken: () => { },
-  setUserTokenInit: () => { }
+  setUserTokenInit: () => { },
+  transferXRPHash: [],
+  setTransferXRPHash: () => { }
   // setUserToken: () => { }
 };
 
@@ -83,6 +87,8 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
   const [logining, setLogining] = useState(true)
   const [loadingToken, setLoadingToken] = useState(false)
   const [loadingUserToken, setLoadingUserToken] = useState(false)
+
+  const [transferXRPHash, setTransferXRPHash] = useState<{ indexToken: number, hash: string }[]>([])
 
   const getAllUserToken = useCallback(async () => {
     if (!isConnect || !connectData || !connectData.xrp || allToken.length === 0) return [];
@@ -145,7 +151,8 @@ export const MainProvider = ({ children }: { children: ReactNode }) => {
       logining, setLogining,
       loadingToken, setLoadingToken,
       setUserTokenInit,
-      loadingUserToken, setLoadingUserToken
+      loadingUserToken, setLoadingUserToken,
+      transferXRPHash, setTransferXRPHash
     }}>
       {children}
     </MainContext.Provider>

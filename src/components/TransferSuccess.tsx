@@ -5,8 +5,9 @@ import { SuccessTransferItem } from "./TransferItem";
 
 const TransferSuccess = () => {
 
-  const { completeToReturn, selectedTransferNFT } = useTransfer()
+  const { completeToReturn, selectedTransferNFT, transferXRPHash } = useTransfer()
 
+  console.log("xrp hash", transferXRPHash)
   return (
     <Container maxW="1200">
 
@@ -18,7 +19,10 @@ const TransferSuccess = () => {
       <Center>
         <Box maxW="670" my="6" flex="1">
           <Card>
-            {selectedTransferNFT.map(item => <SuccessTransferItem key={item.tokenId} nftData={item} />)}
+            {selectedTransferNFT.map(item => {
+              const xrpHash = transferXRPHash.find(xrp => xrp.indexToken === item.tokenIndex)
+              return <SuccessTransferItem key={item.tokenId} nftData={item} xrpLink={`https://nft-devnet.xrpl.org/transactions/${xrpHash?.hash || "#"}`} />
+            })}
           </Card>
         </Box>
       </Center>
