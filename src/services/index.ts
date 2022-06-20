@@ -278,7 +278,7 @@ export const getICMetadata = async (tokenIndex: number) => {
   console.log(res, 'icp metadata');
   if ('ok' in res) {
     //@ts-ignore
-    return Promise.resolve(blob2text(nonfungible.metadata[0]));
+    return Promise.resolve(blob2text(res.ok.nonfungible.metadata[0]));
   } else {
     return Promise.reject(res.err);
   }
