@@ -73,11 +73,11 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData, di
 
   return (
     <Flex align="center" justifyContent="space-between" color="white" fontSize="sm" h="78px" borderBottom="1px solid white" px="4">
-      <HStack>
+      <HStack spacing={2}>
         <Text>{nftData.tokenIndex}</Text>
         <Image cursor="pointer" onClick={() => setIsOpen(true)} src={image} w="60px" />
         <Tooltip closeOnMouseDown={false} label={nftData.tokenIdentifier}>
-          {ellipsis(nftData?.tokenIdentifier)}
+          <Text pl={type === "success" ? 10 : 2}>{ellipsis(nftData?.tokenIdentifier)}</Text>
         </Tooltip>
       </HStack>
       <HStack spacing="6">
