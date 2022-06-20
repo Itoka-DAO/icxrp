@@ -12,7 +12,7 @@ import { useToken } from './useToken';
 import { useSteps } from 'chakra-ui-steps';
 
 export const transfer2ICSteps = [
-  { label: 'Skip' },
+  { label: 'Query XRP keys' },
   { label: 'request burning to XRPL' },
 ];
 

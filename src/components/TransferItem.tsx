@@ -1,6 +1,7 @@
 import { HStack, Icon, Tag, Text, VStack, Flex, Tooltip, Image, Modal, ModalBody, ModalContent, ModalOverlay, Link } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiCheckCircle, FiPlusSquare, FiXCircle, FiArrowRight } from 'react-icons/fi'
+import { getICMetadata, getXRPMetadata } from "../services";
 import { NFTokenFormated } from "../types/token";
 import { ellipsis } from "../utils";
 
@@ -55,11 +56,26 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData, di
 
   const [isOpen, setIsOpen] = useState(false)
 
+  const [image, setImage] = useState("")
+
+  useEffect(() => {
+    if (type === "success") {
+      if (nftData.chain === "ICP") {
+        getXRPMetadata(nftData.tokenIndex).then(setImage)
+      }
+      if (nftData.chain === "XRP") {
+        getICMetadata(nftData.tokenIndex).then(setImage)
+      }
+    }
+    setImage(nftData.metadata)
+  }, [nftData, type])
+
+
   return (
     <Flex align="center" justifyContent="space-between" color="white" fontSize="sm" h="78px" borderBottom="1px solid white" px="4">
       <HStack>
         <Text>{nftData.tokenIndex}</Text>
-        <Image cursor="pointer" onClick={() => setIsOpen(true)} src={nftData?.metadata} w="60px" />
+        <Image cursor="pointer" onClick={() => setIsOpen(true)} src={image} w="60px" />
         <Tooltip closeOnMouseDown={false} label={nftData.tokenIdentifier}>
           {ellipsis(nftData?.tokenIdentifier)}
         </Tooltip>
@@ -77,7 +93,7 @@ const TransferItem = ({ onAddToTransfer, onRemoveFromTransfer, type, nftData, di
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <Image src={nftData.metadata} />
+            <Image src={image} />
           </ModalBody>
         </ModalContent>
       </Modal>

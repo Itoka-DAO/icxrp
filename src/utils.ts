@@ -28,7 +28,7 @@ export const ellipsisKey = (str: string) => {
   return `${strstart}***${strend}`;
 };
 
-const blob2text = (blob: string) => {
+export const blob2text = (blob: string) => {
   return Buffer.from(blob, 'utf8').toString();
 };
 

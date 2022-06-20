@@ -9,6 +9,7 @@ import { ConnectType } from '../types/connect';
 import InternetIdentity from './InternetIdentity';
 import Stoic from './stoic';
 import Plug from './plug';
+import { blob2text } from '../utils';
 
 const canisterId_xrp = 'e7vz4-wqaaa-aaaai-aclha-cai';
 const canisterId_nft = 'n46fk-6qaaa-aaaai-ackxa-cai';
@@ -255,6 +256,29 @@ export const getTokenIdentifier = async (id: string | number) => {
 
   if ('ok' in res) {
     return Promise.resolve(res.ok);
+  } else {
+    return Promise.reject(res.err);
+  }
+};
+
+export const getXRPMetadata = async (tokenIndex: number) => {
+  const brageActor = await createBrageActor();
+  const res = await brageActor.getMetadata_xrp(tokenIndex);
+  console.log(res, 'xrp metadata');
+  if ('ok' in res) {
+    return Promise.resolve(res.ok);
+  } else {
+    return Promise.reject(res.err);
+  }
+};
+
+export const getICMetadata = async (tokenIndex: number) => {
+  const brageActor = await createBrageActor();
+  const res = await brageActor.getMetadata_ic(tokenIndex);
+  console.log(res, 'icp metadata');
+  if ('ok' in res) {
+    //@ts-ignore
+    return Promise.resolve(blob2text(nonfungible.metadata[0]));
   } else {
     return Promise.reject(res.err);
   }
