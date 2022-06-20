@@ -23,18 +23,18 @@ const Header = () => {
         {isConnect && connectData && <HStack align="stretch">
           <VStack color="gray.300" align="stretch">
             <Text title={connectData.principal}>
-              Welcome User: 
+              Welcome User:\s
               <Tooltip label="copy to clip board">
                 <Link onClick={onCopy}>{ellipsisShort(connectData.principal)}</Link>
               </Tooltip>
             </Text>
             {connectData.xrp && <Text>
-              XRP Public Key: 
+              XRP Public Key:\s
               <Tooltip label="copy to clip board">
                 <Link onClick={onCopyPublicKey}>{ellipsisKey(connectData.xrp.publicKey)}</Link>
               </Tooltip>
             </Text>}
-            {connectData.xrp && <Text>XRP Private Key: 
+            {connectData.xrp && <Text>XRP Private Key:\s
               <Tooltip label="copy to clip board">
                 <Link onClick={onCopyPrivateKey}>{ellipsisKey(connectData.xrp.privateKey)}</Link>
               </Tooltip>
