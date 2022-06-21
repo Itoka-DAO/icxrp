@@ -45,7 +45,6 @@ Depoloyer might try [Fleek](https://fleek.co/) to build and deploy and frontend.
 ```
 5. `dfx depoly` and we see each other in metaverse. 
 
-Note: Don't forget reconfiguring CanisterID to your own canisters or you might want to join [Itoka discord](https://discord.gg/7BqSGMCE5c) and our developers reply to you by the same answer.
-
+Note: Don't forget reconfiguring CanisterID to your own canisters, or you might want to join [Itoka discord](https://discord.gg/7BqSGMCE5c) and get same answers from our developers.
 
 
