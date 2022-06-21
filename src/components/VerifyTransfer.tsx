@@ -14,7 +14,7 @@ const VerifyTransfer = () => {
       <Box textAlign="center">
         {!submitLoading && <Heading color="white" fontSize="6xl">Please Verify Your Transaction</Heading>}
         {submitLoading && <Heading mb="4" color="white" fontSize="6xl">Processing Transaction</Heading>}
-        {submitLoading && <Text color="red" fontSize="2xl">Warning: do not fresh the page.</Text>}
+        {submitLoading && <Text color="red" fontSize="2xl">Warning: do not refresh the page.</Text>}
       </Box>
 
       <Center>
