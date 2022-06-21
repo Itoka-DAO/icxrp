@@ -7,6 +7,8 @@
   <img src="https://github.com/Itoka-DAO/xrp_server/blob/main/xrpl.png">
 </p>
 
+Explore demo on [HERE](https://aack7-jaaaa-aaaai-acl6a-cai.ic0.app/)
+
 This frontend repository is current on production. :fire: 
 
 Please review [Bazahei NFT](https://github.com/Itoka-DAO/IC-XRP) repo before deploy the the frontend 
@@ -18,4 +20,32 @@ We are planning to provide bug bounty when Bazahei NFT is ready to scale up. :do
 Invite the talent hackers to join [Itoka discord](https://discord.gg/7BqSGMCE5c)
 
 LFG and པ་ཀྲ་ཧེ་།! :rocket: 
+
+## Deploy tricks to IC network
+
+Depoloyer might try [Fleek](https://fleek.co/) to build and deploy and frontend. However, we recommend build within your own cansiters by following; 
+
+1. `yarn install; yarn build;` the copy the `build` file.
+2. under a new directory, `dfx new bazahei;cd ./bazahei`. paste the `build` under `./bazahei`
+3. config the dfx.json
+```json
+      "bazahei_assets": {
+      "dependencies": ["bazahei"],
+      "frontend": {
+        "entrypoint": "build/index.html" 
+      },
+      "source": ["build/"],
+      "type": "assets"
+```
+4. config the package.json to skip the webpack build
+```json
+  "scripts": {
+    "build": "ls",
+  },
+```
+5. `dfx depoly` and we see each other in metaverse. 
+
+Note: Don't forget reconfiguring CanisterID to your own canisters or you might want to join [Itoka discord](https://discord.gg/7BqSGMCE5c) and our developers reply to you by the same answer.
+
+
 
