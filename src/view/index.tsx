@@ -36,7 +36,7 @@ const Main = () => {
 
       {/* body */}
       {!isConnect && <Box h="100vh" textAlign="center" bgImage={BGImg} bgRepeat="no-repeat" bgPos="center">
-        <Heading color="white" fontSize="6xl" lineHeight="tall">Internet Computer - Ripple Cross-chain Solution<small>(beta)</small></Heading>
+        <Heading color="white" fontSize="6xl" lineHeight="tall">Itoka Cross-Chain Nexus<small>(beta)</small></Heading>
         <Heading color="white" fontSize="3xl" as="h3" lineHeight="tall">An Infrastructure for Multi-chain Entertainment</Heading>
         {/* <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" onClick={() => setConnectPanelVisible(true)}>Start Transfer</Button> */}
         <Button bgColor="primary" size="lg" borderRadius="full" w="60" mt="24" isLoading={isLogining} onClick={openConnectPanel}>Start Transfer</Button>
